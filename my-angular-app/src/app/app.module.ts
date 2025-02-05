@@ -13,17 +13,18 @@ import {ShopComponent} from './shop/shop.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AboutComponent,
-    ContactComponent,
-    TermsComponent,
-    FooterComponent,
-    ShopComponent
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    PrivacyComponent
+    PrivacyComponent,
+    AboutComponent,
+    ContactComponent,
+    AppComponent,
+    FooterComponent,
+    TermsComponent,
+    ShopComponent
   ],
   providers: [],
   // Remove the bootstrap property as we're using bootstrapApplication
