@@ -7,13 +7,13 @@ import {PrivacyComponent} from './privacy/privacy.component';
 import {TermsComponent} from './terms/terms.component';
 
 export const routes: Routes = [
-  {path: '', component: ShopComponent}, // Strona główna
-  {path: 'about', component: AboutComponent},  // O nas
-  {path: 'contact', component: ContactComponent}, // Kontakt
-  {path: 'privacy', component: PrivacyComponent}, // Polityka prywatności
-  {path: 'terms', component: TermsComponent}, // Regulamin
-  {path: 'shop', component: TermsComponent}, // Regulamin
-  {path: '**', redirectTo: '', pathMatch: 'full'} // Nieznane ścieżki
+  {path: '', component: ShopComponent},
+  {path: 'about', component: AboutComponent},
+  {path: 'contact', component: ContactComponent},
+  {path: 'privacy', component: PrivacyComponent},
+  {path: 'terms', component: TermsComponent},
+  {path: 'shop', component: ShopComponent},
+  {path: '**', redirectTo: '', pathMatch: 'full'}
 ];
 
 @NgModule({

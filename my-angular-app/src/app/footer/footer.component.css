@@ -2,6 +2,8 @@ footer {
   text-align: center;
   padding: 10px;
   background-color: #f8f9fa;
+  border-radius: 10px;
+  margin: 0 5%;
 }
 
 footer p {

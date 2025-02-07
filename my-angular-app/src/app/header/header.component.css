@@ -1,0 +1,28 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  margin: 0 5%;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #343a40;
+  cursor: pointer;
+}
+
+.shop-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.cart {
+  font-size: 14px;
+  color: #007bff;
+  cursor: pointer;
+}
