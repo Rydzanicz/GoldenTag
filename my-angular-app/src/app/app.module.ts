@@ -27,7 +27,6 @@ import {ShopComponent} from './shop/shop.component';
     ShopComponent
   ],
   providers: [],
-  // Remove the bootstrap property as we're using bootstrapApplication
 })
 export class AppModule {
   static bootstrap() {

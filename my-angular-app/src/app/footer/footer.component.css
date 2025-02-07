@@ -1,7 +1,7 @@
 footer {
   text-align: center;
   padding: 10px;
-  background-color: #f8f9fa;
+  background-color: #1f1f1f;
   border-radius: 10px;
   margin: 0 5%;
 }
@@ -10,4 +10,22 @@ footer p {
   margin: 0;
   font-size: 14px;
   color: #6c757d;
+}
+
+a {
+  color: #b0b0b0;
+  text-decoration: none;
+  border-bottom: 1px solid #7a7a7a;
+  transition: color 0.3s, border-bottom 0.3s;
+}
+
+a:hover {
+  color: #cb8347;
+  border-bottom: 1px solid #cb8347;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+a:active {
+  color: #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
 }

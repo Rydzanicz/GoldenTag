@@ -1,5 +1,11 @@
-<div class="container">
-  <div class="content">
-    <p>MyComponent działa poprawnie!</p>
+<div class="product-container">
+  <div *ngIf="isExchangeVisible" id="exchangeImg">
+
+    <div *ngFor="let product of products">
+      <app-product
+        [product]="product"
+        (addToCart)="onAddToCart($event)">
+      </app-product>
+  </div>
   </div>
 </div>
