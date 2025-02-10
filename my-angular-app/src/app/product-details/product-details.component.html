@@ -1,12 +1,40 @@
 <div class="container">
     <div class="content">
         <div *ngIf="product" class="product-details">
-            <img [src]="product.image" alt="{{ product.name }}" class="product-image"/>
+            <div class="gallery">
+                <button class="arrow left" (click)="prevImage()">&lt;</button>
+                <img
+                        [src]="product.image[currentImageIndex]"
+                        alt="{{ product.name }}"
+                        class="product-image"
+                        (click)="zoomImage()"
+                />
+
+                <button class="arrow right" (click)="nextImage()">&gt;</button>
+            </div>
+
             <div class="product-details">
                 <h3>{{ product.name }}</h3>
                 <p>{{ product.description }}</p>
-                <p class="product-price">{{ formatCurrency(product.price) }}</p>
+                <p>{{ product.descriptionDetails }}</p>
+                <div class="price-container">
+
+                    <button class="add-to-cart-button" (click)="addToCart(product)"><p
+                            class="product-price">{{ formatCurrency(product.price) }}</p>Dodaj do koszyka
+                    </button>
+                </div>
             </div>
+
         </div>
+    </div>
+
+    <div *ngIf="isZoomed" class="zoom-modal">
+        <div class="zoom-overlay" (click)="closeZoom()"></div>
+        <img
+                [src]="product.image[currentImageIndex]"
+                alt="{{ product.name }}"
+                class="zoomed-image"
+        />
+        <button class="zoom-close" (click)="closeZoom()">✕</button>
     </div>
 </div>
