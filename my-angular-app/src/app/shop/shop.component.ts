@@ -19,20 +19,18 @@ export class ShopComponent {
     {
       id: 1,
       name: 'Zegarn na ścianę',
-      description: 'Opis produktu 1',
+      description: 'Zegar z żywica epoksydowej',
+      descriptionDetails: 'Zegar z żywica epoksydowej',
       price: 49.99,
       image: 'assets/zegar.jpg'
     },
     {
       id: 2,
-      name: 'Produkt 2',
-      description: 'Opis produktu 2',
+      name: 'Zakładka do książek',
+      description: 'Zakładka do książek z żywica epoksydowej',
+      descriptionDetails: 'Zakładka do książek z żywica epoksydowej',
       price: 79.99,
       image: 'assets/zywica.jpg'
     }
   ];
-
-  onAddToCart(product: any): void {
-    console.log(`Dodano do koszyka: ${product.name}`);
-  }
 }

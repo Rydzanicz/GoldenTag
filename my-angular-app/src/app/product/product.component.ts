@@ -1,11 +1,11 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {CurrencyPipe} from '@angular/common';
+import {Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
   imports: [
-    CurrencyPipe
+    RouterLink
   ],
   styleUrls: ['./product.component.css']
 })
@@ -13,7 +13,30 @@ export class ProductComponent {
   @Input() product: any;
   @Output() addToCart = new EventEmitter<any>();
 
-  onAddToCart() {
-    this.addToCart.emit(this.product);
+  constructor(private router: Router) {
+  }
+
+
+  navigateToDetails(): void {
+    this.router.navigate(['/product', this.product.id], {
+      queryParams: {
+        name: this.product.name,
+        description: this.product.description,
+        descriptionDetails: this.product.descriptionDetails,
+        price: this.product.price,
+        image: this.product.image
+      }
+    });
+  }
+
+
+  formatCurrency(price: number): string {
+    return new Intl.NumberFormat('pl-PL', {
+      style: 'currency',
+      currency: 'PLN',
+      currencyDisplay: 'symbol',
+    })
+      .format(price)
+      .replace(' zł', '');
   }
 }

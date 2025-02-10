@@ -5,6 +5,7 @@ import {AboutComponent} from './about/about.component';
 import {ContactComponent} from './contact/contact.component';
 import {PrivacyComponent} from './privacy/privacy.component';
 import {TermsComponent} from './terms/terms.component';
+import {ProductDetailsComponent} from './product-details/product-details.component';
 
 export const routes: Routes = [
   {path: '', component: ShopComponent},
@@ -13,6 +14,7 @@ export const routes: Routes = [
   {path: 'privacy', component: PrivacyComponent},
   {path: 'terms', component: TermsComponent},
   {path: 'shop', component: ShopComponent},
+  {path: 'product/:id', component: ProductDetailsComponent},
   {path: '**', redirectTo: '', pathMatch: 'full'}
 ];
 
