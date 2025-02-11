@@ -26,7 +26,10 @@
       <div class="cart-summary" *ngIf="cartItems.length > 0">
         <p><strong>Łącznie: {{ cartItemCount }} przedmiotów</strong></p>
         <p><strong>Łączna Kwota: {{ formatCurrency(getTotalPrice()) }}</strong></p>
-        <button class="clear-cart-button" (click)="clearCart()">Wyczyść koszyk</button>
+        <button class="clear-cart-button" (click)="clearCart()" title="Wyczyść koszyk">
+          <i class="material-icons">delete</i>
+        </button>
+        <button class="checkout-button" (click)="proceedToCheckout()">Przejdź do płatności</button>
       </div>
     </div>
   </div>

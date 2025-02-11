@@ -96,4 +96,9 @@ export class CartComponent implements OnInit {
     return this.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   }
 
+  proceedToCheckout(): void {
+    console.log('Przechodzenie do płatności...');
+    window.location.href = '/checkout';
+  }
+
 }
