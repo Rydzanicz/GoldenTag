@@ -50,3 +50,24 @@ header .material-icons {
 header .material-icons:hover {
   transform: rotate(20deg);
 }
+
+header .cart {
+  position: relative;
+}
+
+header .cart .cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ff0000;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+}

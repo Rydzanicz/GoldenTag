@@ -3,7 +3,8 @@
     <span class="material-icons">home</span>
   </div>
   <div class="shop-name">Domowe Rękodzieło</div>
-  <div class="cart" routerLink="/cart" style="cursor: pointer;">
+  <div class="cart" (click)="navigateToCart()" style="cursor: pointer; position: relative;">
     <span class="material-icons">shopping_cart</span>
+    <span class="cart-count" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
   </div>
 </header>

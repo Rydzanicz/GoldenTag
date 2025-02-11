@@ -24,7 +24,7 @@ export class ProductComponent {
         description: this.product.description,
         descriptionDetails: this.product.descriptionDetails,
         price: this.product.price,
-        image: JSON.stringify(this.product.image) // Serializacja tablicy zdjęć
+        image: JSON.stringify(this.product.image)
       }
     });
   }
