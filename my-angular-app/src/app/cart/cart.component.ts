@@ -64,6 +64,7 @@ export class CartComponent implements OnInit {
     }
   }
 
+
   decreaseOne(item: any): void {
     if (this.isBrowser && localStorage) {
       const found = this.cartItems.find(cartItem => cartItem.id === item.id);
