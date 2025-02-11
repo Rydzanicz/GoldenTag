@@ -1,10 +1,14 @@
 <div class="container">
   <div class="content">
+    <h2 *ngIf="cartItems.length > 0">Twój Koszyk</h2>
     <div class="cart">
-      <h2>Twój Koszyk</h2>
-      <p *ngIf="cartItems.length === 0">Koszyk jest pusty.</p>
-      <div class="cart-items">
-        <ul *ngIf="cartItems.length > 0">
+      <div class="empty-cart" *ngIf="cartItems.length === 0">
+        <i class="material-icons">shopping_cart</i>
+        <p>Twój koszyk jest pusty!</p>
+        <p>Dodaj produkty do koszyka, aby je tutaj zobaczyć.</p>
+      </div>
+      <div class="cart-items" *ngIf="cartItems.length > 0">
+        <ul>
           <li *ngFor="let item of cartItems; let i = index">
             <div class="cart-item">
               <span>{{ item.name }}</span>
@@ -19,7 +23,7 @@
           </li>
         </ul>
       </div>
-      <div class="cart-summary">
+      <div class="cart-summary" *ngIf="cartItems.length > 0">
         <p><strong>Łącznie: {{ cartItemCount }} przedmiotów</strong></p>
         <p><strong>Łączna Kwota: {{ formatCurrency(getTotalPrice()) }}</strong></p>
         <button class="clear-cart-button" (click)="clearCart()">Wyczyść koszyk</button>
