@@ -1,11 +1,14 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
+import {Router} from '@angular/router';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   styleUrls: ['./cart.component.css']
 })
@@ -13,8 +16,9 @@ export class CartComponent implements OnInit {
   cartItems: any[] = [];
   cartItemCount: number = 0;
   isBrowser: boolean;
+  note = '';
 
-  constructor(@Inject(PLATFORM_ID) private platformId: object) {
+  constructor(@Inject(PLATFORM_ID) private platformId: object, private router: Router) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
@@ -42,6 +46,7 @@ export class CartComponent implements OnInit {
       this.cartItems = [];
       this.cartItemCount = 0;
       this.saveCart();
+      this.note = '';
     }
   }
 
@@ -63,7 +68,6 @@ export class CartComponent implements OnInit {
       }
     }
   }
-
 
   decreaseOne(item: any): void {
     if (this.isBrowser && localStorage) {
@@ -97,9 +101,11 @@ export class CartComponent implements OnInit {
     return this.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   }
 
-  proceedToCheckout(): void {
-    console.log('Przechodzenie do płatności...');
-    window.location.href = '/checkout';
+  navigateToSummary(): void {
+    this.router.navigate(['/summary'], {
+      queryParams: {
+        note: this.note
+      }
+    });
   }
-
 }

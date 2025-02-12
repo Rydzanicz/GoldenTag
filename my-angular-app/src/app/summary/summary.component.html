@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="content">
+    <div class="cart-summary" *ngIf="cartItems.length > 0">
+      <p><strong>Łącznie: {{ cartItemCount }} przedmiotów</strong></p>
+      <p><strong>Łączna Kwota: {{ formatCurrency(getTotalPrice()) }}</strong></p>
+      <p><strong>Notatka:   {{ note }}</strong></p>
+
+      <button class="checkout-button" (click)="navigateToSummary()">Przejdź do płatności</button>
+    </div>
+  </div>
+</div>

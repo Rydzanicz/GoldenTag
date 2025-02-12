@@ -26,10 +26,17 @@
       <div class="cart-summary" *ngIf="cartItems.length > 0">
         <p><strong>Łącznie: {{ cartItemCount }} przedmiotów</strong></p>
         <p><strong>Łączna Kwota: {{ formatCurrency(getTotalPrice()) }}</strong></p>
+        <div class="note-container">
+          <label for="noteInput" class="note-label">
+            Notatka: (Proszę o podanie koloru.<br>Nie podanie oznacza zgodę na wybór losowy)
+          </label>
+          <textarea id="noteInput" [(ngModel)]="note" class="note-input"
+                    placeholder="Proszę o podanie koloru."></textarea>
+        </div>
         <button class="clear-cart-button" (click)="clearCart()" title="Wyczyść koszyk">
           <i class="material-icons">delete</i>
         </button>
-        <button class="checkout-button" (click)="proceedToCheckout()">Przejdź do płatności</button>
+        <button class="checkout-button" (click)="navigateToSummary()">Przejdź do płatności</button>
       </div>
     </div>
   </div>
