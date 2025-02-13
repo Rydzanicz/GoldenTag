@@ -22,9 +22,13 @@ export class InvoiceMailerService {
 
   sendBuyerData(buyerData: any): Observable<any> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json', 'X-API-KEY':
-      this.apiKey
+      'Content-Type': 'application/json',
+      'X-API-KEY': this.apiKey
     });
-    return this.getHttp().post(`${this.apiUrl}/save-invoice`, buyerData, {headers});
+
+    return this.getHttp().post(`${this.apiUrl}/save-invoice`, buyerData, {
+      headers,
+      responseType: 'text' as 'json'
+    });
   }
 }

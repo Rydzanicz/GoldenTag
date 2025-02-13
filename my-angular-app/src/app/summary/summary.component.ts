@@ -79,11 +79,27 @@ export class SummaryComponent implements OnInit {
     this.invoiceMailerService.sendBuyerData(request).subscribe({
       next: () => {
         alert('Dane kupującego zostały wysłane pomyślnie!');
+
+        this.clearCart();
+        this.navigateToShop();
       },
       error: () => {
         alert('Wystąpił błąd podczas wysyłania danych kupującego.');
       }
     });
+  }
+
+  navigateToShop() {
+    this.router.navigate(['/shop']);
+  }
+
+  clearCart(): void {
+    if (this.isBrowser && localStorage) {
+      localStorage.removeItem('cart');
+      this.cartItems = [];
+      this.cartItemCount = 0;
+      this.note = '';
+    }
   }
 
   goBackToCart(): void {
