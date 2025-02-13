@@ -2,9 +2,11 @@ import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
+import {InvoiceMailerService} from '../services/invoice-mailer.service';
 
 @Component({
   selector: 'app-summary',
+  standalone: true,
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.css'],
   imports: [
@@ -28,7 +30,8 @@ export class SummaryComponent implements OnInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private invoiceMailerService: InvoiceMailerService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
@@ -73,8 +76,14 @@ export class SummaryComponent implements OnInit {
       }))
     };
 
-    console.log('Przygotowane dane do zapisu:', JSON.stringify(request, null, 2));  // czytelny format JSON
-    alert('Dane kupującego i zamówienia zostały przygotowane!');
+    this.invoiceMailerService.sendBuyerData(request).subscribe({
+      next: () => {
+        alert('Dane kupującego zostały wysłane pomyślnie!');
+      },
+      error: () => {
+        alert('Wystąpił błąd podczas wysyłania danych kupującego.');
+      }
+    });
   }
 
   goBackToCart(): void {

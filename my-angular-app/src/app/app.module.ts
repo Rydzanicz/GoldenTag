@@ -9,7 +9,7 @@ import {FooterComponent} from './footer/footer.component';
 import {AboutComponent} from './about/about.component';
 import {AppRoutingModule} from './app.routes';
 import {ShopComponent} from './shop/shop.component';
-
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -24,6 +24,7 @@ import {ShopComponent} from './shop/shop.component';
     AppComponent,
     FooterComponent,
     TermsComponent,
+    HttpClientModule,
     ShopComponent
   ],
   providers: [],
