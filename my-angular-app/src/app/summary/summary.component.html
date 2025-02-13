@@ -53,7 +53,25 @@
               jest wymagany w adresie email.</small>
           </div>
         </div>
-
+        <div class="buyer-form-group">
+          <label for="buyerPhone">Numer Telefonu: *</label>
+          <div class="input-wrapper">
+            <input
+              type="tel"
+              id="buyerPhone"
+              name="buyerPhone"
+              class="buyer-input"
+              [(ngModel)]="buyerPhone"
+              placeholder="Wprowadź numer telefonu"
+              pattern="[0-9]{9}"
+              required
+            />
+            <small class="error"
+                   *ngIf="!buyerForm.controls['buyerPhone']?.valid && buyerForm.controls['buyerPhone']?.touched">
+              Wprowadź poprawny numer telefonu (9 cyfr).
+            </small>
+          </div>
+        </div>
         <div class="buyer-form-group">
           <label for="buyerAddress">Adres: *</label>
           <div class="input-wrapper">

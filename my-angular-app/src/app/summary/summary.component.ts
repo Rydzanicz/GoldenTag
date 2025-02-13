@@ -23,6 +23,7 @@ export class SummaryComponent implements OnInit {
   buyerAddress: string = '';
   buyerNip: string = '';
   emailError: boolean = false;
+  buyerPhone: string = '';
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -58,14 +59,22 @@ export class SummaryComponent implements OnInit {
   }
 
   saveBuyerInfo(): void {
-    const buyerInfo = {
+    const request = {
       buyerName: this.buyerName,
       buyerAddressEmail: this.buyerAddressEmail,
       buyerAddress: this.buyerAddress,
-      buyerNip: this.buyerNip
+      buyerNip: this.buyerNip,
+      buyerPhone: this.buyerPhone,
+      orders: this.cartItems.map(item => ({
+        name: item.name,
+        description: this.note,
+        quantity: item.quantity,
+        price: item.price
+      }))
     };
-    console.log('Dane kupującego zapisane:', buyerInfo);
-    alert('Dane kupującego zostały zapisane!');
+
+    console.log('Przygotowane dane do zapisu:', JSON.stringify(request, null, 2));  // czytelny format JSON
+    alert('Dane kupującego i zamówienia zostały przygotowane!');
   }
 
   goBackToCart(): void {
