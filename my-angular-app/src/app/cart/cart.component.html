@@ -30,8 +30,22 @@
           <label for="noteInput" class="note-label">
             Notatka: (Proszę o podanie koloru.<br>Nie podanie oznacza zgodę na wybór losowy)
           </label>
-          <textarea id="noteInput" [(ngModel)]="note" class="note-input"
-                    placeholder="Proszę o podanie koloru."></textarea>
+          <textarea id="noteInput"
+                    [(ngModel)]="note"
+                    class="note-input"
+                    placeholder="Proszę o podanie koloru."
+                    minlength="1"
+                    maxlength="255"
+                    required
+                    #noteInput="ngModel"></textarea>
+          <div *ngIf="noteInput.invalid && noteInput.touched" class="validation-errors">
+            <p class="error" *ngIf="noteInput.errors?.['required']">
+              ❌ Notatka jest wymagana.
+            </p>
+            <p class="error" *ngIf="noteInput.errors?.['maxlength']">
+              ❌ Notatka nie może mieć więcej niż 255 znaków.
+            </p>
+          </div>
         </div>
         <button class="clear-cart-button" (click)="clearCart()" title="Wyczyść koszyk">
           <i class="material-icons">delete</i>

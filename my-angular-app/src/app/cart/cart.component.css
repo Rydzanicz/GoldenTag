@@ -230,3 +230,25 @@
     font-size: 0.9rem;
   }
 }
+
+.validation-errors {
+  margin-top: 5px;
+}
+
+.validation-errors .error {
+  color: #ff4d4d;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.validation-errors .error::before {
+  content: "⚠️ ";
+  margin-right: 5px;
+}
+
+.note-container textarea.ng-invalid.ng-touched {
+  border: 1px solid #ff4d4d;
+  background-color: #ffe6e6;
+}

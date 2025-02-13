@@ -1,16 +1,16 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-summary',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule
-  ],
   templateUrl: './summary.component.html',
-  styleUrl: './summary.component.css'
+  styleUrls: ['./summary.component.css'],
+  imports: [
+    FormsModule,
+    CommonModule
+  ]
 })
 export class SummaryComponent implements OnInit {
   cartItems: any[] = [];
@@ -18,19 +18,27 @@ export class SummaryComponent implements OnInit {
   note = '';
   cartItemCount: number = 0;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: object, private route: ActivatedRoute, private router: Router) {
+  buyerName: string = '';
+  buyerAddressEmail: string = '';
+  buyerAddress: string = '';
+  buyerNip: string = '';
+  emailError: boolean = false;
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: object,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   ngOnInit(): void {
     if (this.isBrowser) {
       this.loadCart();
-      console.log(this.note);
     }
     this.route.queryParams.subscribe((params) => {
-      this.note = params['note'] || null
+      this.note = params['note'] || null;
     });
-    console.log(this.note);
   }
 
   loadCart(): void {
@@ -49,11 +57,26 @@ export class SummaryComponent implements OnInit {
     return this.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   }
 
-  navigateToSummary(): void {
-    this.router.navigate(['/summary'], {
+  saveBuyerInfo(): void {
+    const buyerInfo = {
+      buyerName: this.buyerName,
+      buyerAddressEmail: this.buyerAddressEmail,
+      buyerAddress: this.buyerAddress,
+      buyerNip: this.buyerNip
+    };
+    console.log('Dane kupującego zapisane:', buyerInfo);
+    alert('Dane kupującego zostały zapisane!');
+  }
+
+  goBackToCart(): void {
+    this.router.navigate(['/cart'], {
       queryParams: {
         note: this.note
       }
     });
+  }
+
+  checkEmailValidation(emailValue: string): void {
+    this.emailError = !emailValue.includes('@');
   }
 }

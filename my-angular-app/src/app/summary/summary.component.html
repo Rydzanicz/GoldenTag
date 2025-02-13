@@ -1,11 +1,114 @@
 <div class="container">
   <div class="content">
-    <div class="cart-summary" *ngIf="cartItems.length > 0">
+    <div class="left-summary cart-summary">
+      <h3>Podsumowanie Koszyka</h3>
       <p><strong>Łącznie: {{ cartItemCount }} przedmiotów</strong></p>
       <p><strong>Łączna Kwota: {{ formatCurrency(getTotalPrice()) }}</strong></p>
-      <p><strong>Notatka:   {{ note }}</strong></p>
+      <p><strong>Notatka:</strong></p>
+      <p class="note"><strong>(Proszę o podanie koloru. Nie podanie oznacza zgodę na wybór losowy):</strong></p>
+      <p class="note scroll-note"><strong>{{ note }}</strong></p>
+    </div>
+    <div class="right-summary buyer-info">
+      <h3>Dane Kupującego</h3>
+      <form #buyerForm="ngForm" class="buyer-form">
 
-      <button class="checkout-button" (click)="navigateToSummary()">Przejdź do płatności</button>
+        <div class="buyer-form-group">
+          <label for="buyerName">Imię i Nazwisko: *</label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="buyerName"
+              name="buyerName"
+              class="buyer-input"
+              [(ngModel)]="buyerName"
+              placeholder="Wprowadź imię i nazwisko"
+              required
+            />
+            <small class="error"
+                   *ngIf="!buyerForm.controls['buyerName']?.valid && buyerForm.controls['buyerName']?.touched">
+              To pole jest wymagane.
+            </small>
+          </div>
+        </div>
+
+        <div class="buyer-form-group">
+          <label for="buyerEmail">Adres Email: *</label>
+          <div class="input-wrapper">
+            <input
+              type="email"
+              id="buyerEmail"
+              name="buyerEmail"
+              class="buyer-input"
+              [(ngModel)]="buyerAddressEmail"
+              placeholder="Wprowadź adres email"
+              (ngModelChange)="checkEmailValidation($event)"
+              required
+            />
+            <small class="error"
+                   *ngIf="!buyerForm.controls['buyerEmail']?.valid && buyerForm.controls['buyerEmail']?.touched">
+              Podaj poprawny adres email.
+            </small>
+
+            <small class="error" *ngIf="emailError">&#64;
+              jest wymagany w adresie email.</small>
+          </div>
+        </div>
+
+        <div class="buyer-form-group">
+          <label for="buyerAddress">Adres: *</label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="buyerAddress"
+              name="buyerAddress"
+              class="buyer-input"
+              [(ngModel)]="buyerAddress"
+              placeholder="Wprowadź adres"
+              required
+            />
+            <small class="error"
+                   *ngIf="!buyerForm.controls['buyerAddress']?.valid && buyerForm.controls['buyerAddress']?.touched">
+              To pole jest wymagane.
+            </small>
+          </div>
+        </div>
+
+        <div class="buyer-form-group">
+          <label for="buyerNip">NIP (opcjonalnie):</label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="buyerNip"
+              name="buyerNip"
+              class="buyer-input"
+              [(ngModel)]="buyerNip"
+              placeholder="Wprowadź NIP (opcjonalne)"
+              pattern="[0-9]{10}"
+            />
+            <small class="error"
+                   *ngIf="buyerForm.controls['buyerNip']?.invalid && buyerForm.controls['buyerNip']?.touched">
+              Podano niepoprawny NIP (10 cyfr).
+            </small>
+          </div>
+        </div>
+        <div class="button-group">
+          <button
+            type="button"
+            class="back-button"
+            (click)="goBackToCart()"
+          >
+            Powrót do Koszyka
+          </button>
+          <button
+            type="button"
+            class="checkout-button"
+            (click)="saveBuyerInfo()"
+            [disabled]="!buyerForm.valid"
+          >
+            Zatwierdź Dane
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

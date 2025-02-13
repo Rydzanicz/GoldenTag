@@ -102,6 +102,14 @@ export class CartComponent implements OnInit {
   }
 
   navigateToSummary(): void {
+    if (this.note.trim().length === 0) {
+      return;
+    }
+
+    if (this.note.length > 255) {
+      return;
+    }
+
     this.router.navigate(['/summary'], {
       queryParams: {
         note: this.note
