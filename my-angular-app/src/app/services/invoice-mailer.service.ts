@@ -7,7 +7,7 @@ import {Observable} from 'rxjs';
 })
 export class InvoiceMailerService {
   private apiUrl = 'http://localhost:8080';
-  private apiKey = '';
+  private apiKey = 'VIGGO=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWSUdHTyIsImlhdCI6MTczMzM5MTE2OCwiZXhwIjoxNzMzNDI3MTY4fQ.8QE--sghB1EU8u_bbmsETQ_RuY2W7P5HEbBo7twkyH8';
   private http: HttpClient | undefined;
 
   constructor(private injector: Injector) {

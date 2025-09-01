@@ -1,64 +1,56 @@
-import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {Router, RouterModule} from '@angular/router';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
-import {Subscription} from 'rxjs';
+import {LocalStorageService} from '../services/LocalStorageService';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  imports: [
-    CommonModule
-  ],
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
+  imports: [CommonModule, RouterModule],
+  standalone: true
 })
-export class HeaderComponent implements OnInit, OnDestroy {
-  cartItemCount: number = 0;
-  isBrowser: boolean;
-  private routerSubscription: Subscription | null = null;
+export class HeaderComponent implements OnInit {
 
-  constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: object) {
+  cartItemsCount = 0;
+  private isBrowser = false;
+
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private localStorageService: LocalStorageService
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     if (this.isBrowser) {
-      this.loadCartItemCount();
+      this.updateCartCount();
 
-      window.addEventListener('storage', this.handleStorageEvent);
-
-      this.routerSubscription = this.router.events.subscribe((event) => {
-        if (event instanceof NavigationEnd) {
-          this.loadCartItemCount();
-        }
+      window.addEventListener('cartUpdated', () => {
+        this.updateCartCount();
       });
     }
   }
 
-  ngOnDestroy(): void {
+  openCart() {
     if (this.isBrowser) {
-      window.removeEventListener('storage', this.handleStorageEvent);
-      this.routerSubscription?.unsubscribe();
+      this.router.navigate(['/cart']);
     }
   }
 
-  loadCartItemCount(): void {
-    if (this.isBrowser) {
-      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      this.cartItemCount = cart.reduce((total: number, item: any) => total + item.quantity, 0);
-    }
+  getCartItemsCount(): number {
+    return this.cartItemsCount;
   }
 
-  private handleStorageEvent = (event: StorageEvent): void => {
-    if (event.key === 'cart') {
-      this.loadCartItemCount();
+  private updateCartCount() {
+    if (!this.localStorageService.isAvailable) {
+      this.cartItemsCount = 0;
+      return;
     }
-  };
 
-  navigateToShop() {
-    this.router.navigate(['/shop']);
-  }
-
-  navigateToCart() {
-    this.router.navigate(['/cart']);
+    const cartData = this.localStorageService.getItem('cart');
+    const cart = cartData ? JSON.parse(cartData) : [];
+    this.cartItemsCount = cart.reduce((total: number, item: any) => total + (item.quantity || 0), 0);
   }
 }

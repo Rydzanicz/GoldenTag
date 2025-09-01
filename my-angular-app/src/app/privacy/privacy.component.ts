@@ -1,11 +1,20 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {RouterModule} from '@angular/router';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-privacy',
-  imports: [],
   templateUrl: './privacy.component.html',
-  styleUrl: './privacy.component.css'
+  styleUrls: ['./privacy.component.css'],
+  imports: [CommonModule, RouterModule],
+  standalone: true
 })
-export class PrivacyComponent {
+export class PrivacyComponent implements OnInit {
+  currentYear = new Date().getFullYear();
 
+  ngOnInit() {
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0); // Auto scroll do góry
+    }
+  }
 }

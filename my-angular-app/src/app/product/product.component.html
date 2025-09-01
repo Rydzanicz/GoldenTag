@@ -1,12 +1,78 @@
-<div class="container">
-  <div class="content">
-    <div class="product" (click)="navigateToDetails()" [routerLink]="['/product', product.id]">
-      <img [src]="product.image[0]" alt="{{ product.name }}" class="product-image"/>
-      <div class="product-details">
-        <h3>{{ product.name }}</h3>
-        <p>{{ product.description }}</p>
-        <p class="product-price">{{ formatCurrency(product.price) }}</p>
+<div class="product-card" (click)="onProductClick()">
+  <div class="product-image-container">
+    <img
+      [src]="product.image && product.image.length > 0 ? product.image[0] : 'assets/placeholder-product.jpg'"
+      [alt]="product.name"
+      class="product-image"
+      (error)="onImageError($event)">
+
+    <div class="product-badge" *ngIf="product.badge">
+      {{ product.badge }}
+    </div>
+
+    <div class="product-overlay">
+      <button class="btn-quick-view" (click)="onQuickView($event)" [attr.aria-label]="'Szybki podgląd ' + product.name">
+        <span class="material-icons">visibility</span>
+        Szybki podgląd
+      </button>
+    </div>
+  </div>
+
+  <div class="product-content">
+    <div class="product-category" *ngIf="product.category">
+      {{ product.category }}
+    </div>
+
+    <h3 class="product-name">{{ product.name }}</h3>
+
+    <p class="product-description" *ngIf="product.description">
+      {{ product.description }}
+    </p>
+
+    <div class="product-rating" *ngIf="product.rating">
+      <div class="rating-stars">
+        <span class="material-icons"
+              *ngFor="let star of getRatingStars(product.rating)"
+              [class.filled]="star.filled">
+          {{ star.filled ? 'star' : 'star_border' }}
+        </span>
       </div>
+      <span class="rating-count" *ngIf="product.ratingCount">
+        ({{ product.ratingCount }} opinii)
+      </span>
+    </div>
+
+    <div class="product-price">
+      <span class="price-amount">{{ product.price }}</span>
+      <span class="product-price-currency">PLN</span>
+      <span class="price-original" *ngIf="product.originalPrice">
+        {{ product.originalPrice }} PLN
+      </span>
+    </div>
+
+    <div class="product-materials" *ngIf="product.materials">
+      <span class="materials-label">Materiały:</span>
+      <span class="materials-text">{{ product.materials }}</span>
+    </div>
+
+    <div class="product-actions">
+      <button
+        class="btn-add-to-cart"
+        (click)="onAddToCart($event)"
+        [disabled]="isAddingToCart"
+        [attr.aria-label]="'Dodaj ' + product.name + ' do koszyka'">
+        <span class="material-icons" *ngIf="!isAddingToCart">add_shopping_cart</span>
+        <span class="loading-spinner" *ngIf="isAddingToCart"></span>
+        {{ isAddingToCart ? 'Dodawanie...' : 'Dodaj do koszyka' }}
+      </button>
+
+      <button
+        class="btn-wishlist"
+        (click)="onToggleWishlist($event)"
+        [class.active]="isInWishlist"
+        [attr.aria-label]="isInWishlist ? 'Usuń z listy życzeń' : 'Dodaj do listy życzeń'">
+        <span class="material-icons">{{ isInWishlist ? 'favorite' : 'favorite_border' }}</span>
+      </button>
     </div>
   </div>
 </div>

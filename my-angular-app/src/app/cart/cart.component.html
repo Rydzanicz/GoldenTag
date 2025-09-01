@@ -1,56 +1,153 @@
-<div class="container">
-  <div class="content">
-    <h2 *ngIf="cartItems.length > 0">Twój Koszyk</h2>
-    <div class="cart">
-      <div class="empty-cart" *ngIf="cartItems.length === 0">
-        <i class="material-icons">shopping_cart</i>
-        <p>Twój koszyk jest pusty!</p>
-        <p>Dodaj produkty do koszyka, aby je tutaj zobaczyć.</p>
-      </div>
-      <div class="cart-items" *ngIf="cartItems.length > 0">
-        <ul>
-          <li *ngFor="let item of cartItems; let i = index">
-            <div class="cart-item">
-              <span>{{ item.name }}</span>
-              <span>{{ formatCurrency(item.price) }}</span>
-              <div class="quantity-controls">
-                <button (click)="decreaseOne(item)">-</button>
-                <span>{{ item.quantity }}</span>
-                <button (click)="addOne(item)">+</button>
-              </div>
-              <button (click)="removeItem(i)" class="remove-button">Usuń</button>
+<div class="cart-container">
+  <div class="cart-content">
+    <div class="cart-header">
+      <h2 class="cart-title">
+        <span class="material-icons">shopping_cart</span>
+        Koszyk
+      </h2>
+      <p class="cart-subtitle" *ngIf="cartItems.length > 0">
+        {{ cartItems.length }} {{ cartItems.length === 1 ? 'produkt' : 'produktów' }} w koszyku
+      </p>
+    </div>
+
+    <div class="cart-body">
+      <!-- Pełny koszyk -->
+      <div class="cart-layout" *ngIf="cartItems.length > 0">
+        <div class="cart-items-section">
+          <div class="cart-actions-top">
+            <button
+              class="clear-cart-btn"
+              (click)="clearCart()"
+              [attr.aria-label]="'Wyczyść koszyk zawierający ' + cartItems.length + ' produktów'">
+              <span class="material-icons">delete_sweep</span>
+              Wyczyść koszyk
+            </button>
+          </div>
+
+          <div class="cart-item" *ngFor="let item of cartItems; trackBy: trackByCartItem">
+            <div class="cart-item-image-container">
+              <img
+                [src]="item.image || 'assets/placeholder-product.jpg'"
+                [alt]="item.name"
+                class="cart-item-image"
+                (error)="onImageError($event)">
             </div>
-          </li>
-        </ul>
-      </div>
-      <div class="cart-summary" *ngIf="cartItems.length > 0">
-        <p><strong>Łącznie: {{ cartItemCount }} przedmiotów</strong></p>
-        <p><strong>Łączna Kwota: {{ formatCurrency(getTotalPrice()) }}</strong></p>
-        <div class="note-container">
-          <label for="noteInput" class="note-label">
-            Notatka: (Proszę o podanie koloru.<br>Nie podanie oznacza zgodę na wybór losowy)
-          </label>
-          <textarea id="noteInput"
-                    [(ngModel)]="note"
-                    class="note-input"
-                    placeholder="Proszę o podanie koloru."
-                    minlength="1"
-                    maxlength="255"
-                    required
-                    #noteInput="ngModel"></textarea>
-          <div *ngIf="noteInput.invalid && noteInput.touched" class="validation-errors">
-            <p class="error" *ngIf="noteInput.errors?.['required']">
-              ❌ Notatka jest wymagana.
-            </p>
-            <p class="error" *ngIf="noteInput.errors?.['maxlength']">
-              ❌ Notatka nie może mieć więcej niż 255 znaków.
-            </p>
+
+            <div class="cart-item-details">
+              <h4 class="cart-item-name">{{ item.name }}</h4>
+              <div class="cart-item-category" *ngIf="item.category">
+                {{ item.category }}
+              </div>
+              <div class="cart-item-materials" *ngIf="item.materials">
+                <strong>Materiały:</strong> {{ item.materials }}
+              </div>
+              <div class="cart-item-price">
+                <span class="price-single">{{ item.price }} PLN</span>
+                <span class="price-multiply" *ngIf="item.quantity > 1"> × {{ item.quantity }}</span>
+              </div>
+            </div>
+
+            <div class="cart-item-controls">
+              <div class="quantity-controls">
+                <button
+                  class="quantity-btn quantity-decrease"
+                  (click)="decreaseQuantity(item)"
+                  [disabled]="item.quantity <= 1"
+                  [attr.aria-label]="'Zmniejsz ilość ' + item.name">
+                  <span class="material-icons">remove</span>
+                </button>
+
+                <span class="quantity-display" [attr.aria-label]="'Ilość: ' + item.quantity">
+                  {{ item.quantity }}
+                </span>
+
+                <button
+                  class="quantity-btn quantity-increase"
+                  (click)="increaseQuantity(item)"
+                  [attr.aria-label]="'Zwiększ ilość ' + item.name">
+                  <span class="material-icons">add</span>
+                </button>
+              </div>
+
+              <button
+                class="remove-btn"
+                (click)="removeItem(item)"
+                [attr.aria-label]="'Usuń ' + item.name + ' z koszyka'">
+                <span class="material-icons">delete</span>
+                Usuń
+              </button>
+            </div>
+
+            <div class="cart-item-total">
+              <span class="item-total-price">{{ getItemTotal(item) }} PLN</span>
+            </div>
           </div>
         </div>
-        <button class="clear-cart-button" (click)="clearCart()" title="Wyczyść koszyk">
-          <i class="material-icons">delete</i>
-        </button>
-        <button class="checkout-button" (click)="navigateToSummary()">Przejdź do płatności</button>
+
+        <div class="cart-summary">
+          <h3 class="cart-summary-title">Podsumowanie zamówienia</h3>
+
+          <div class="summary-row">
+            <span>Wartość produktów:</span>
+            <span>{{ getSubtotal() }} PLN</span>
+          </div>
+
+          <div class="summary-row" *ngIf="shipping > 0">
+            <span>Dostawa:</span>
+            <span>{{ shipping }} PLN</span>
+          </div>
+
+          <div class="summary-row" *ngIf="shipping === 0">
+            <span>Dostawa:</span>
+            <span class="free-shipping">GRATIS</span>
+          </div>
+
+          <div class="summary-row" *ngIf="discount > 0">
+            <span>Rabat:</span>
+            <span class="discount-amount">-{{ discount }} PLN</span>
+          </div>
+
+          <div class="cart-total">
+            <span>Razem do zapłaty:</span>
+            <span class="total-amount">{{ getTotalPrice() }} PLN</span>
+          </div>
+
+          <div class="note-container">
+            <label class="note-label" for="orderNote">Uwagi do zamówienia:</label>
+            <textarea
+              id="orderNote"
+              class="note-input form-textarea"
+              [(ngModel)]="orderNote"
+              placeholder="Dodaj uwagi do zamówienia (opcjonalnie)"
+              rows="3">
+            </textarea>
+          </div>
+
+          <button
+            class="checkout-btn"
+            (click)="proceedToCheckout()"
+            [disabled]="isProcessing"
+            [attr.aria-label]="'Przejdź do płatności za zamówienie o wartości ' + getTotalPrice() + ' PLN'">
+            <span class="material-icons" *ngIf="!isProcessing">payment</span>
+            <span class="loading-spinner" *ngIf="isProcessing"></span>
+            {{ isProcessing ? 'Przetwarzanie...' : 'Przejdź do płatności' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Pusty koszyk -->
+      <div class="empty-cart" *ngIf="cartItems.length === 0">
+        <div class="empty-cart-icon">
+          <span class="material-icons">shopping_cart</span>
+        </div>
+        <h3 class="empty-cart-title">Twój koszyk jest pusty</h3>
+        <p class="empty-cart-text">Dodaj produkty do koszyka, aby kontynuować zakupy</p>
+        <div class="empty-cart-actions">
+          <button class="btn btn-primary" routerLink="/shop">
+            <span class="material-icons">shopping_bag</span>
+            Rozpocznij zakupy
+          </button>
+        </div>
       </div>
     </div>
   </div>

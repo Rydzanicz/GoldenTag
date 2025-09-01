@@ -1,12 +1,19 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-footer',
-  imports: [],
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.css'
+  styleUrls: ['./footer.component.css'],
+  imports: [CommonModule, RouterModule],
+  standalone: true
 })
-export class FooterComponent {
-  currentYear: number = new Date().getFullYear();
+export class FooterComponent implements OnInit {
 
+  currentYear = new Date().getFullYear();
+
+  ngOnInit() {
+    // Inicjalizacja komponentu footer
+  }
 }

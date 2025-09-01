@@ -1,14 +1,58 @@
 <footer>
-  <nav>
-    <div class="footer-container">
-      <div class="footer-legal">
-        <p>
-          <a href="/privacy">Polityka prywatności</a>
-          | <a href="/terms">Regulamin</a>
-          | <a href="/about">Kim jesteśmy</a>
-          | <a href="/contact">Kontakt</a>
-        </p>
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>GoldenTag</h3>
+      <p>Tworzymy najpiękniejszą biżuterię dla zwierząt w Polsce. Każdy produkt jest ręcznie wykonywany przez
+        doświadczonych jubilerów z najszlachetniejszych materiałów.</p>
+    </div>
+
+    <div class="footer-section">
+      <h3>Obsługa klienta</h3>
+      <div class="footer-links">
+        <a routerLink="/contact">Kontakt</a>
+        <a routerLink="/shipping">Dostawa</a>
+        <a routerLink="/privacy">Polityka prywatności</a>
+        <a routerLink="/warranty">Płatności</a>
+        <a routerLink="/terms">Regulamin</a>
       </div>
     </div>
-  </nav>
+
+    <div class="footer-section">
+      <h3>Kontakt</h3>
+      <div class="contact-info">
+        <div class="contact-item">
+          <span class="material-icons">location_on</span>
+          <span>ul. Złotnicza 15<br>00-001 Warszawa</span>
+        </div>
+        <div class="contact-item">
+          <span class="material-icons">phone</span>
+          <span>+48 123 456 789</span>
+        </div>
+        <div class="contact-item">
+          <span class="material-icons">email</span>
+          <span>kontaktdoldentag.pl</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-bottom-content">
+      <p>&copy; {{ currentYear }} GoldenTag. Wszelkie prawa zastrzeżone.</p>
+      <div class="footer-badges">
+        <div class="badge">
+          <span class="material-icons">verified</span>
+          <span>Certyfikat GIA</span>
+        </div>
+        <div class="badge">
+          <span class="material-icons">security</span>
+          <span>Bezpieczne płatności</span>
+        </div>
+        <div class="badge">
+          <span class="material-icons">privacy_tip</span>
+          <span>RODO Compliance</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </footer>

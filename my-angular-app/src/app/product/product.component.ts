@@ -1,42 +1,102 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
+import {Component, EventEmitter, Inject, Input, OnInit, Output, PLATFORM_ID} from '@angular/core';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
+import {Product} from '../models/product.interface';
+import {LocalStorageService} from '../services/LocalStorageService';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
-  imports: [
-    RouterLink
-  ],
-  styleUrls: ['./product.component.css']
+  styleUrls: ['./product.component.css'],
+  imports: [CommonModule],
+  standalone: true
 })
-export class ProductComponent {
-  @Input() product: any;
-  @Output() addToCart = new EventEmitter<any>();
+export class ProductComponent implements OnInit {
+  @Input() product!: Product;
+  @Output() productClick = new EventEmitter<Product>();
+  @Output() addToCart = new EventEmitter<Product>();
+  @Output() toggleWishlist = new EventEmitter<Product>();
+  @Output() quickView = new EventEmitter<Product>();
 
-  constructor(private router: Router) {
+  isAddingToCart = false;
+  isInWishlist = false;
+  private isBrowser = false;
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private localStorageService: LocalStorageService
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
+  ngOnInit() {
+    if (this.isBrowser) {
+      this.checkWishlistStatus();
+    }
+  }
 
-  navigateToDetails(): void {
-    this.router.navigate(['/product', this.product.id], {
-      queryParams: {
-        name: this.product.name,
-        description: this.product.description,
-        descriptionDetails: this.product.descriptionDetails,
-        price: this.product.price,
-        image: JSON.stringify(this.product.image)
+  onProductClick() {
+    this.productClick.emit(this.product);
+  }
+
+  onAddToCart(event: Event) {
+    event.stopPropagation();
+    this.isAddingToCart = true;
+
+    setTimeout(() => {
+      this.addToCart.emit(this.product);
+      this.isAddingToCart = false;
+    }, 500);
+  }
+
+  onToggleWishlist(event: Event) {
+    event.stopPropagation();
+
+    if (!this.isBrowser) return;
+
+    this.isInWishlist = !this.isInWishlist;
+    this.updateWishlist();
+    this.toggleWishlist.emit(this.product);
+  }
+
+  onQuickView(event: Event) {
+    event.stopPropagation();
+    this.quickView.emit(this.product);
+  }
+
+  onImageError(event: any) {
+    event.target.src = 'assets/placeholder-product.jpg';
+  }
+
+  getRatingStars(rating: number): { filled: boolean }[] {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push({filled: i <= rating});
+    }
+    return stars;
+  }
+
+  private checkWishlistStatus() {
+    if (!this.localStorageService.isAvailable) return;
+
+    const wishlistData = this.localStorageService.getItem('wishlist');
+    const wishlist = wishlistData ? JSON.parse(wishlistData) : [];
+    this.isInWishlist = wishlist.some((item: any) => item.id === this.product.id);
+  }
+
+  private updateWishlist() {
+    if (!this.localStorageService.isAvailable) return;
+
+    const wishlistData = this.localStorageService.getItem('wishlist');
+    let wishlist = wishlistData ? JSON.parse(wishlistData) : [];
+
+    if (this.isInWishlist) {
+      if (!wishlist.some((item: any) => item.id === this.product.id)) {
+        wishlist.push(this.product);
       }
-    });
-  }
+    } else {
+      wishlist = wishlist.filter((item: any) => item.id !== this.product.id);
+    }
 
-
-  formatCurrency(price: number): string {
-    return new Intl.NumberFormat('pl-PL', {
-      style: 'currency',
-      currency: 'PLN',
-      currencyDisplay: 'symbol',
-    })
-      .format(price)
-      .replace(' zł', '');
+    this.localStorageService.setItem('wishlist', JSON.stringify(wishlist));
   }
 }

@@ -1,48 +1,178 @@
-import {Component} from '@angular/core';
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {ProductComponent} from '../product/product.component';
-import {CommonModule} from '@angular/common';
+import {Product} from '../models/product.interface';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
+import {LocalStorageService} from '../services/LocalStorageService';
 
 @Component({
   selector: 'app-shop',
   templateUrl: './shop.component.html',
-  imports: [
-    ProductComponent,
-    CommonModule
-  ],
-  styleUrls: ['./shop.component.css']
+  styleUrls: ['./shop.component.css'],
+  imports: [ProductComponent, CommonModule, FormsModule],
+  standalone: true
 })
+export class ShopComponent implements OnInit {
 
+  showFilters = true;
+  selectedCategory = '';
+  priceRange = '';
+  private isBrowser = false;
 
-export class ShopComponent {
-  isExchangeVisible: boolean = true;
-  products = [
+  products: Product[] = [
     {
       id: 1,
-      name: 'Zegarn na ścianę',
-      description: 'Zegar z żywica epoksydowej',
-      descriptionDetails: 'Zegar wykonany z najwyższej jakości żywicy epoksydowej, tworzony ręcznie z niezwykłą precyzją' +
+      name: 'Royal Crown Diamond Collar',
+      description: 'Ekskluzywna obroża z 24 diamentami o łącznej wadze 2 karatów.',
+      descriptionDetails: 'Obroża wykonana z najwyższej jakości materiałów, tworzona ręcznie z niezwykłą precyzją' +
         ' i artystycznym wyczuciem. Każdy egzemplarz powstaje w procesie rzemieślniczym, co sprawia, że jest unikalny i' +
-        ' jedyny w swoim rodzaju. Dzięki indywidualnemu podejściu do każdego projektu, zegar staje się nie tylko funkcjonalnym czasomierzem,' +
-        ' lecz także wyjątkową ozdobą każdego wnętrza.\n' +
-        '\n' +
-        'Idealnie sprawdzi się jako niebanalny dodatek do Twojego domu lub biura oraz jako wyjątkowy prezent,' +
-        ' który zachwyci swoją oryginalnością. Wybierz zegar, który łączy piękno natury z rękodzielniczym kunsztem!',
-      price: 49.99,
-      image: ['assets/zegar1.jpg', 'assets/zegar2.jpg', 'assets/zegar3.jpg']
+        ' jedyny w swoim rodzaju.',
+      price: 2500,
+      originalPrice: 2800,
+      image: ['assets/diamond-collar-1.jpg', 'assets/diamond-collar-2.jpg'],
+      category: 'Diamentowe Obroże',
+      badge: 'Premium',
+      materials: '18k złoto białe, skóra naturalna, diamenty VVS1',
+      rating: 5,
+      ratingCount: 12
     },
     {
       id: 2,
-      name: 'Zakładka do książek',
-      description: 'Zakładka do książek z żywica epoksydowej',
-      descriptionDetails: 'Zakładka do książek wykonana z najwyższej jakości żywicy epoksydowej, tworzona ręcznie z dbałością o każdy szczegół.' +
-        ' Każda zakładka powstaje w procesie indywidualnego wykonania, co sprawia, że jest unikalna i pełna artystycznego wyrazu.' +
-        ' Dzięki rzemieślniczej precyzji oraz użyciu starannie dobranych materiałów, zakładka nie tylko spełnia swoją funkcję praktyczną,' +
-        ' ale również stanowi wyjątkowy element dekoracyjny.\n' +
-        '\n' +
-        'To idealny dodatek dla pasjonatów literatury, który świetnie sprawdzi się także jako elegancki upominek dla bliskich.' +
-        ' Połącz piękno z funkcjonalnością i odkryj magię zakładek tworzonych z pasją!',
-      price: 79.99,
-      image: ['assets/zywica1.jpg', 'assets/zywica2.jpg', 'assets/zywica3.jpg']
+      name: 'Sapphire Ocean Blue',
+      description: 'Przepiękna obroża z szafirami Ceylon w otoczeniu diamentów.',
+      descriptionDetails: 'Obroża wykonana z najwyższej jakości szafirów Ceylon, tworzona ręcznie z dbałością o każdy szczegół.' +
+        ' Każda obroża powstaje w procesie indywidualnego wykonania, co sprawia, że jest unikalna i pełna artystycznego wyrazu.',
+      price: 1800,
+      image: ['assets/sapphire-collar-1.jpg', 'assets/sapphire-collar-2.jpg'],
+      category: 'Szafirowe Kolekcje',
+      badge: 'Bestseller',
+      materials: '14k złoto, szafiry Ceylon, diamenty',
+      rating: 4,
+      ratingCount: 8
+    },
+    {
+      id: 3,
+      name: 'Ruby Heart Luxury',
+      description: 'Romantyczna obroża z rubinami w kształcie serca.',
+      descriptionDetails: 'Romantyczna obroża z rubinami w kształcie serca. Każdy kamień został ręcznie dopasowany przez naszych mistrzów jubilerów.',
+      price: 2200,
+      image: ['assets/ruby-collar-1.jpg', 'assets/ruby-collar-2.jpg'],
+      category: 'Rubinowe Kolekcje',
+      badge: 'Nowy',
+      materials: '14k złoto różowe, rubiny birmasyjskie, diamenty',
+      rating: 5,
+      ratingCount: 15
+    },
+    {
+      id: 4,
+      name: 'Platinum Eternity',
+      description: 'Najdroższa obroża w naszej kolekcji z 48 diamentami.',
+      descriptionDetails: 'Najdroższa obroża w naszej kolekcji. 48 diamentów ułożonych w nieskończony wzór symbolizujący wieczną miłość.',
+      price: 3200,
+      image: ['assets/platinum-collar-1.jpg', 'assets/platinum-collar-2.jpg'],
+      category: 'Diamentowe Obroże',
+      badge: 'Exclusive',
+      materials: 'Platyna, diamenty VVS1, skóra premium',
+      rating: 5,
+      ratingCount: 6
     }
   ];
+
+  filteredProducts: Product[] = [];
+
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private localStorageService: LocalStorageService
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
+
+  ngOnInit() {
+    this.filteredProducts = [...this.products];
+  }
+
+  filterProducts() {
+    this.filteredProducts = this.products.filter(product => {
+      let categoryMatch = true;
+      let priceMatch = true;
+
+      if (this.selectedCategory) {
+        categoryMatch = product.category?.toLowerCase().includes(this.selectedCategory.toLowerCase()) || false;
+      }
+
+      if (this.priceRange) {
+        const price = product.price;
+        switch (this.priceRange) {
+          case '0-50':
+            priceMatch = price >= 0 && price <= 50;
+            break;
+          case '50-100':
+            priceMatch = price > 50 && price <= 100;
+            break;
+          case '100+':
+            priceMatch = price > 100;
+            break;
+          default:
+            priceMatch = true;
+        }
+      }
+
+      return categoryMatch && priceMatch;
+    });
+  }
+
+  clearFilters() {
+    this.selectedCategory = '';
+    this.priceRange = '';
+    this.filteredProducts = [...this.products];
+  }
+
+  onProductClick(product: Product) {
+    if (this.isBrowser) {
+      this.router.navigate(['/product', product.id]);
+    }
+  }
+
+  onAddToCart(product: Product) {
+    this.addToCartService(product);
+    if (this.isBrowser) {
+      this.showToast('Produkt dodany do koszyka', 'success');
+    }
+  }
+
+  trackByProductId(index: number, product: Product): number {
+    return product.id;
+  }
+
+  private addToCartService(product: Product) {
+    if (!this.localStorageService.isAvailable) return;
+
+    const cartData = this.localStorageService.getItem('cart');
+    const cart = cartData ? JSON.parse(cartData) : [];
+
+    const existingItemIndex = cart.findIndex((item: any) => item.id === product.id);
+
+    if (existingItemIndex > -1) {
+      cart[existingItemIndex].quantity += 1;
+    } else {
+      cart.push({...product, quantity: 1});
+    }
+
+    this.localStorageService.setItem('cart', JSON.stringify(cart));
+
+    if (this.isBrowser) {
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+    }
+  }
+
+  private showToast(message: string, type: 'success' | 'error' | 'info') {
+    if (this.isBrowser) {
+      const event = new CustomEvent('showToast', {
+        detail: {message, type}
+      });
+      window.dispatchEvent(event);
+    }
+  }
 }

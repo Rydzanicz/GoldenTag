@@ -29,3 +29,26 @@ a:active {
   color: #e0e0e0;
   border-bottom: 1px solid #e0e0e0;
 }
+
+/* Footer Links - każdy link w nowej linii */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  display: block;
+  padding: var(--spacing-xs) 0;
+  border-left: 3px solid transparent;
+  padding-left: var(--spacing-sm);
+}
+
+.footer-links a:hover {
+  color: var(--color-primary);
+  transform: translateX(4px);
+  border-left-color: var(--color-primary);
+}

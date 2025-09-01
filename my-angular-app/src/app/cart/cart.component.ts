@@ -1,119 +1,147 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
-import {Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
+import {Router, RouterModule} from '@angular/router';
+import {CartItem} from '../models/product.interface';
+import {LocalStorageService} from '../services/LocalStorageService';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
-  styleUrls: ['./cart.component.css']
+  styleUrls: ['./cart.component.css'],
+  imports: [CommonModule, FormsModule, RouterModule],
+  standalone: true
 })
 export class CartComponent implements OnInit {
-  cartItems: any[] = [];
-  cartItemCount: number = 0;
-  isBrowser: boolean;
-  note = '';
 
-  constructor(@Inject(PLATFORM_ID) private platformId: object, private router: Router) {
+  cartItems: CartItem[] = [];
+  orderNote = '';
+  promoCode = '';
+  isProcessing = false;
+  shipping = 0;
+  discount = 0;
+  private isBrowser = false;
+
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private localStorageService: LocalStorageService
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     if (this.isBrowser) {
-      this.loadCart();
+      this.loadCartItems();
+      this.calculateShipping();
     }
   }
 
-  loadCart(): void {
-    if (this.isBrowser && localStorage) {
-      const cart = localStorage.getItem('cart');
-      this.cartItems = cart ? JSON.parse(cart) : [];
-      this.updateCartItemCount();
-    }
-  }
-
-  updateCartItemCount(): void {
-    this.cartItemCount = this.cartItems.reduce((total, item) => total + item.quantity, 0);
-  }
-
-  clearCart(): void {
-    if (this.isBrowser && localStorage) {
-      localStorage.removeItem('cart');
+  loadCartItems() {
+    if (!this.localStorageService.isAvailable) {
       this.cartItems = [];
-      this.cartItemCount = 0;
-      this.saveCart();
-      this.note = '';
+      return;
+    }
+
+    const cartData = this.localStorageService.getItem('cart');
+    this.cartItems = cartData ? JSON.parse(cartData) : [];
+  }
+
+  clearCart() {
+    if (!this.isBrowser) return;
+
+    if (confirm('Czy na pewno chcesz wyczyścić koszyk?')) {
+      this.cartItems = [];
+      this.localStorageService.removeItem('cart');
+      this.updateCartInStorage();
     }
   }
 
-  removeItem(index: number): void {
-    if (this.isBrowser && localStorage) {
-      this.cartItems.splice(index, 1);
-      this.saveCart();
-      this.updateCartItemCount();
+  increaseQuantity(item: CartItem) {
+    item.quantity++;
+    this.updateCartInStorage();
+  }
+
+  decreaseQuantity(item: CartItem) {
+    if (item.quantity > 1) {
+      item.quantity--;
+      this.updateCartInStorage();
     }
   }
 
-  addOne(item: any): void {
-    if (this.isBrowser && localStorage) {
-      const found = this.cartItems.find(cartItem => cartItem.id === item.id);
-      if (found) {
-        found.quantity += 1;
-        this.saveCart();
-        this.updateCartItemCount();
+  removeItem(item: CartItem) {
+    if (!this.isBrowser) return;
+
+    if (confirm(`Czy na pewno chcesz usunąć ${item.name} z koszyka?`)) {
+      const index = this.cartItems.findIndex(cartItem => cartItem.id === item.id);
+      if (index > -1) {
+        this.cartItems.splice(index, 1);
+        this.updateCartInStorage();
       }
     }
   }
 
-  decreaseOne(item: any): void {
-    if (this.isBrowser && localStorage) {
-      const found = this.cartItems.find(cartItem => cartItem.id === item.id);
-      if (found) {
-        found.quantity -= 1;
-
-        if (found.quantity <= 0) {
-          this.cartItems = this.cartItems.filter(cartItem => cartItem.id !== item.id);
-        }
-
-        this.saveCart();
-        this.updateCartItemCount();
-      }
-    }
+  getItemTotal(item: CartItem): number {
+    return item.price * item.quantity;
   }
 
-  saveCart(): void {
-    if (this.isBrowser && localStorage) {
-      localStorage.setItem('cart', JSON.stringify(this.cartItems));
-      const storageEvent = new StorageEvent('storage', {key: 'cart'});
-      window.dispatchEvent(storageEvent);
-    }
-  }
-
-  formatCurrency(value: number): string {
-    return new Intl.NumberFormat('pl-PL', {style: 'currency', currency: 'PLN'}).format(value);
+  getSubtotal(): number {
+    return this.cartItems.reduce((total, item) => total + this.getItemTotal(item), 0);
   }
 
   getTotalPrice(): number {
-    return this.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    return this.getSubtotal() + this.shipping - this.discount;
   }
 
-  navigateToSummary(): void {
-    if (this.note.trim().length === 0) {
-      return;
-    }
-
-    if (this.note.length > 255) {
-      return;
-    }
-
-    this.router.navigate(['/summary'], {
-      queryParams: {
-        note: this.note
+  proceedToCheckout() {
+    if (this.cartItems.length === 0) {
+      if (this.isBrowser) {
+        this.showToast('Koszyk jest pusty', 'error');
       }
-    });
+      return;
+    }
+
+    this.isProcessing = true;
+
+    setTimeout(() => {
+      if (this.isBrowser) {
+        this.router.navigate(['/checkout']);
+      }
+      this.isProcessing = false;
+    }, 2000);
+  }
+
+  trackByCartItem(index: number, item: CartItem): number {
+    return item.id;
+  }
+
+  onImageError(event: any) {
+    event.target.src = 'assets/placeholder-product.jpg';
+  }
+
+  private updateCartInStorage() {
+    if (!this.localStorageService.isAvailable) return;
+
+    this.localStorageService.setItem('cart', JSON.stringify(this.cartItems));
+
+    if (this.isBrowser) {
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+    }
+
+    this.calculateShipping();
+  }
+
+  private calculateShipping() {
+    const subtotal = this.getSubtotal();
+    this.shipping = subtotal >= 200 ? 0 : 15;
+  }
+
+  private showToast(message: string, type: 'success' | 'error' | 'info') {
+    if (this.isBrowser) {
+      const event = new CustomEvent('showToast', {
+        detail: {message, type}
+      });
+      window.dispatchEvent(event);
+    }
   }
 }

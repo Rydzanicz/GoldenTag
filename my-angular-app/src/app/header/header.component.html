@@ -1,10 +1,21 @@
 <header>
-  <div class="logo" (click)="navigateToShop()" style="cursor: pointer;">
-    <span class="material-icons">home</span>
+  <div class="header__logo" routerLink="/" [routerLinkActive]="'active'">
+    <div class="header__logo-icon">
+      <span class="material-icons">pets</span>
+    </div>
+    <div>
+      <div class="header__brand">Golden Tag</div>
+      <div class="header__tagline">Luksus dla Twoich pupili</div>
+    </div>
   </div>
-  <div class="shop-name">Domowe Rękodzieło</div>
-  <div class="cart" (click)="navigateToCart()" style="cursor: pointer; position: relative;">
-    <span class="material-icons">shopping_cart</span>
-    <span class="cart-count" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+
+  <div class="header__cart" (click)="openCart()"
+       [attr.aria-label]="'Koszyk zawiera ' + getCartItemsCount() + ' produktów'">
+    <div class="header__cart-icon">
+      <span class="material-icons">shopping_cart</span>
+    </div>
+    <div class="header__cart-count" *ngIf="getCartItemsCount() > 0">
+      {{ getCartItemsCount() }}
+    </div>
   </div>
 </header>
