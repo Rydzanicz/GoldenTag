@@ -58,11 +58,6 @@ export class ProductComponent implements OnInit {
     this.toggleWishlist.emit(this.product);
   }
 
-  onQuickView(event: Event) {
-    event.stopPropagation();
-    this.quickView.emit(this.product);
-  }
-
   onImageError(event: any) {
     event.target.src = 'assets/placeholder-product.jpg';
   }

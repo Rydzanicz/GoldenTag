@@ -127,16 +127,6 @@
   background: rgba(255, 62, 108, 0.08);
 }
 
-.product-materials {
-  margin-top: 5px;
-  color: #cfeaff;
-  font-size: 0.96rem;
-}
-
-.materials-label {
-  font-weight: 600;
-}
-
 .rating-stars .material-icons.filled {
   color: #ffd700;
 }
@@ -147,7 +137,7 @@
 
 .rating-count {
   margin-left: 7px;
-  color: #eee;
+  color: #535353;
   font-size: 0.93rem;
 }
 

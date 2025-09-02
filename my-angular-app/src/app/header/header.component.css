@@ -2,11 +2,12 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  background-color: #252525;
-  border-radius: 10px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #f8f4ec 0%, #fffdfa 100%);
+  border-radius: 14px;
   margin: 0 5%;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 16px rgba(220, 195, 152, 0.3);
+  font-family: 'Playfair Display', serif;
 }
 
 header .logo,
@@ -14,41 +15,51 @@ header .cart {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #1f1f1f;
-  color: #ffffff;
+  background-color: #e5d9ae;
+  color: #5a4636;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  transition: background-color 0.3s, transform 0.3s;
+  width: 44px;
+  height: 44px;
+  transition: background-color 0.35s ease, transform 0.35s ease;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(214, 178, 92, 0.4);
 }
 
 header .logo:hover,
 header .cart:hover {
-  background-color: #cb8347;
-  transform: scale(1.1);
+  background-color: #cbac5b;
+  color: #3f2f11;
+  transform: scale(1.12);
+  box-shadow: 0 4px 14px rgba(203, 172, 91, 0.7);
 }
 
 header .shop-name {
-  color: #ffffff;
-  font-size: 20px;
-  font-weight: bold;
+  color: #5a4636;
+  font-size: 22px;
+  font-weight: 700;
   text-align: center;
   flex-grow: 1;
+  letter-spacing: 0.06em;
+  user-select: none;
+  text-shadow: 1px 1px 2px rgba(203, 172, 91, 0.9);
+  transition: color 0.3s ease;
 }
 
 header .shop-name:hover {
-  color: #cb8347;
-  transition: color 0.3s;
+  color: #a8852d;
+  cursor: pointer;
+  text-shadow: 1px 1px 6px rgba(203, 172, 91, 1);
 }
 
 header .material-icons {
-  font-size: 24px;
-  transition: transform 0.3s;
+  font-size: 26px;
+  color: #5a4636;
+  transition: transform 0.35s ease, color 0.35s ease;
 }
 
 header .material-icons:hover {
   transform: rotate(20deg);
+  color: #ad913a;
 }
 
 header .cart {

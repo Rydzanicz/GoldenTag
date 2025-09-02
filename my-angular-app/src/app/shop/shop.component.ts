@@ -33,7 +33,7 @@ export class ShopComponent implements OnInit {
     },
     {
       id: 2,
-      name: 'Sapphire Ocean Blue',
+      name: 'Rodolit + tanzanit',
       description: 'Przepiękna adresówka z rodolitem w otoczeniu tanzanitami.',
       descriptionDetails: 'Adresówka wykonana z najwyższej jakości rodolitem, tworzona ręcznie z dbałością o każdy szczegół.' +
         ' Każda powstaje w procesie indywidualnego wykonania, co sprawia, że jest unikalna i pełna artystycznego wyrazu.',
@@ -45,7 +45,7 @@ export class ShopComponent implements OnInit {
     },
     {
       id: 3,
-      name: 'Ruby Heart Luxury',
+      name: 'Rubinowe serce',
       description: 'Romantyczna obroża z rubinami w kształcie serca.',
       descriptionDetails: 'Romantyczna adresówka z rubinami w kształcie serca. Każdy kamień został ręcznie dopasowany przez naszych mistrzów jubilerów.',
       price: 99,
