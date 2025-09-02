@@ -9,6 +9,9 @@
     <div class="product-badge" *ngIf="product.badge">
       {{ product.badge }}
     </div>
+    <div class="image-caption">
+      Zdjęcie poglądowe
+    </div>
   </div>
 
   <div class="product-content">
@@ -36,7 +39,7 @@
     </div>
 
     <div class="product-price">
-      <span class="ct">{{ product.price }}</span>
+      <span class="price-amount">{{ product.price }}</span>
       <span class="product-price-currency">PLN</span>
       <span class="price-original" *ngIf="product.originalPrice">
         {{ product.originalPrice }} PLN
