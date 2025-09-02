@@ -14,68 +14,45 @@ import {LocalStorageService} from '../services/LocalStorageService';
   standalone: true
 })
 export class ShopComponent implements OnInit {
-
-  showFilters = true;
-  selectedCategory = '';
-  priceRange = '';
   private isBrowser = false;
 
   products: Product[] = [
     {
       id: 1,
-      name: 'Royal Crown Diamond Collar',
-      description: 'Ekskluzywna obroża z 24 diamentami o łącznej wadze 2 karatów.',
-      descriptionDetails: 'Obroża wykonana z najwyższej jakości materiałów, tworzona ręcznie z niezwykłą precyzją' +
+      name: 'Granaty rodolity',
+      description: 'Ekskluzywna adresówka z rodolitamim',
+      descriptionDetails: 'Adresówka wykonana z najwyższej jakości materiałów, tworzona ręcznie z niezwykłą precyzją' +
         ' i artystycznym wyczuciem. Każdy egzemplarz powstaje w procesie rzemieślniczym, co sprawia, że jest unikalny i' +
         ' jedyny w swoim rodzaju.',
-      price: 2500,
-      originalPrice: 2800,
-      image: ['assets/diamond-collar-1.jpg', 'assets/diamond-collar-2.jpg'],
-      category: 'Diamentowe Obroże',
-      badge: 'Premium',
-      materials: '18k złoto białe, skóra naturalna, diamenty VVS1',
+      price: 120,
+      originalPrice: 180,
+      image: ['assets/zegar1.jpg'],
+      badge: 'Bestseller',
       rating: 5,
-      ratingCount: 12
+      ratingCount: 45
     },
     {
       id: 2,
       name: 'Sapphire Ocean Blue',
-      description: 'Przepiękna obroża z szafirami Ceylon w otoczeniu diamentów.',
-      descriptionDetails: 'Obroża wykonana z najwyższej jakości szafirów Ceylon, tworzona ręcznie z dbałością o każdy szczegół.' +
-        ' Każda obroża powstaje w procesie indywidualnego wykonania, co sprawia, że jest unikalna i pełna artystycznego wyrazu.',
-      price: 1800,
-      image: ['assets/sapphire-collar-1.jpg', 'assets/sapphire-collar-2.jpg'],
-      category: 'Szafirowe Kolekcje',
+      description: 'Przepiękna adresówka z rodolitem w otoczeniu tanzanitami.',
+      descriptionDetails: 'Adresówka wykonana z najwyższej jakości rodolitem, tworzona ręcznie z dbałością o każdy szczegół.' +
+        ' Każda powstaje w procesie indywidualnego wykonania, co sprawia, że jest unikalna i pełna artystycznego wyrazu.',
+      price: 130,
+      image: ['assets/zegar2.jpg'],
       badge: 'Bestseller',
-      materials: '14k złoto, szafiry Ceylon, diamenty',
       rating: 4,
-      ratingCount: 8
+      ratingCount: 18
     },
     {
       id: 3,
       name: 'Ruby Heart Luxury',
       description: 'Romantyczna obroża z rubinami w kształcie serca.',
-      descriptionDetails: 'Romantyczna obroża z rubinami w kształcie serca. Każdy kamień został ręcznie dopasowany przez naszych mistrzów jubilerów.',
-      price: 2200,
-      image: ['assets/ruby-collar-1.jpg', 'assets/ruby-collar-2.jpg'],
-      category: 'Rubinowe Kolekcje',
+      descriptionDetails: 'Romantyczna adresówka z rubinami w kształcie serca. Każdy kamień został ręcznie dopasowany przez naszych mistrzów jubilerów.',
+      price: 99,
+      image: ['assets/zegar3.jpg'],
       badge: 'Nowy',
-      materials: '14k złoto różowe, rubiny birmasyjskie, diamenty',
-      rating: 5,
-      ratingCount: 15
-    },
-    {
-      id: 4,
-      name: 'Platinum Eternity',
-      description: 'Najdroższa obroża w naszej kolekcji z 48 diamentami.',
-      descriptionDetails: 'Najdroższa obroża w naszej kolekcji. 48 diamentów ułożonych w nieskończony wzór symbolizujący wieczną miłość.',
-      price: 3200,
-      image: ['assets/platinum-collar-1.jpg', 'assets/platinum-collar-2.jpg'],
-      category: 'Diamentowe Obroże',
-      badge: 'Exclusive',
-      materials: 'Platyna, diamenty VVS1, skóra premium',
-      rating: 5,
-      ratingCount: 6
+      rating: 4.5,
+      ratingCount: 9
     }
   ];
 
@@ -90,42 +67,6 @@ export class ShopComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.filteredProducts = [...this.products];
-  }
-
-  filterProducts() {
-    this.filteredProducts = this.products.filter(product => {
-      let categoryMatch = true;
-      let priceMatch = true;
-
-      if (this.selectedCategory) {
-        categoryMatch = product.category?.toLowerCase().includes(this.selectedCategory.toLowerCase()) || false;
-      }
-
-      if (this.priceRange) {
-        const price = product.price;
-        switch (this.priceRange) {
-          case '0-50':
-            priceMatch = price >= 0 && price <= 50;
-            break;
-          case '50-100':
-            priceMatch = price > 50 && price <= 100;
-            break;
-          case '100+':
-            priceMatch = price > 100;
-            break;
-          default:
-            priceMatch = true;
-        }
-      }
-
-      return categoryMatch && priceMatch;
-    });
-  }
-
-  clearFilters() {
-    this.selectedCategory = '';
-    this.priceRange = '';
     this.filteredProducts = [...this.products];
   }
 

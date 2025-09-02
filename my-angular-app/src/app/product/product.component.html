@@ -9,13 +9,6 @@
     <div class="product-badge" *ngIf="product.badge">
       {{ product.badge }}
     </div>
-
-    <div class="product-overlay">
-      <button class="btn-quick-view" (click)="onQuickView($event)" [attr.aria-label]="'Szybki podgląd ' + product.name">
-        <span class="material-icons">visibility</span>
-        Szybki podgląd
-      </button>
-    </div>
   </div>
 
   <div class="product-content">
