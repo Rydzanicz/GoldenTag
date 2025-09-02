@@ -19,3 +19,248 @@
   background-color: rgba(40, 40, 40, 0.8);
   border-radius: 10px;
 }
+
+.shop-promo-section {
+  display: flex;
+  gap: 48px;
+  background: linear-gradient(135deg, #fff9f9 0%, #f5fbfc 100%);
+  border-radius: 24px;
+  padding: 48px 36px;
+  align-items: center;
+  box-shadow: 0 12px 35px rgba(190, 175, 210, 0.22);
+  margin: 48px 5%;
+  flex-wrap: wrap;
+}
+
+.promo-text {
+  flex: 1 1 480px;
+  color: #5b486e;
+  font-family: 'Georgia', serif;
+}
+
+.promo-text h2 {
+  font-size: 2.8rem;
+  margin-bottom: 16px;
+  font-weight: 700;
+  color: #6e4f92;
+  text-shadow: 1px 1px 2px rgba(110, 79, 146, 0.2);
+}
+
+.promo-text p {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  margin-bottom: 24px;
+  font-weight: 500;
+  color: #7b6d8f;
+}
+
+.promo-image-container {
+  flex: 1 1 440px;
+  max-width: 480px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(168, 135, 198, 0.45);
+}
+
+.promo-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 24px;
+  transition: transform 0.4s ease;
+}
+
+.promo-image-container:hover .promo-image {
+  transform: scale(1.05);
+}
+
+@media (max-width: 900px) {
+  .shop-promo-section {
+    flex-direction: column;
+    margin: 40px 3%;
+    padding: 32px 20px;
+    gap: 28px;
+  }
+
+  .promo-text, .promo-image-container {
+    max-width: 100%;
+  }
+
+  .promo-text h2 {
+    font-size: 2.2rem;
+  }
+
+  .promo-text p {
+    font-size: 1.1rem;
+  }
+}
+
+.engraving-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #fef9f7 0%, #f6fafb 100%);
+  border-radius: 24px;
+  padding: 40px 36px;
+  margin: 48px 5%;
+  box-shadow: 0 12px 35px rgba(200, 180, 240, 0.15);
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.engraving-image-container {
+  flex: 1 1 400px;
+  max-width: 480px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 32px rgba(195, 168, 215, 0.25);
+}
+
+.engraving-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 20px;
+  transition: transform 0.35s ease;
+}
+
+.engraving-image-container:hover .engraving-image {
+  transform: scale(1.05);
+}
+
+.engraving-text {
+  flex: 1 1 480px;
+  max-width: 500px;
+  font-family: 'Georgia', serif;
+  color: #5a4f7a;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+.engraving-text h2 {
+  font-size: 2.6rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #6b5b8a;
+  text-shadow: 0 1px 4px rgba(107, 91, 138, 0.1);
+}
+
+@media (max-width: 900px) {
+  .engraving-section {
+    flex-direction: column;
+    padding: 28px 20px;
+    margin: 40px 3%;
+    gap: 28px;
+  }
+
+  .engraving-image-container,
+  .engraving-text {
+    max-width: 100%;
+  }
+
+  .engraving-text h2 {
+    font-size: 2rem;
+  }
+
+  .engraving-text {
+    font-size: 1.1rem;
+  }
+}
+
+.yorkshire-promo-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #fefcfb 0%, #f7f9fa 100%);
+  border-radius: 24px;
+  padding: 44px 36px;
+  margin: 48px 5%;
+  box-shadow: 0 10px 36px rgba(180, 162, 225, 0.18);
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.yorkshire-text {
+  flex: 1 1 480px;
+  max-width: 520px;
+  font-family: 'Georgia', serif;
+  color: #5a476e;
+  font-size: 1.18rem;
+  line-height: 1.7;
+}
+
+.yorkshire-text h2 {
+  font-size: 2.85rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: #6d5796;
+  text-shadow: 0 1px 3px rgba(109, 87, 150, 0.15);
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #d6b2e8 0%, #add0f6 100%);
+  color: #503875;
+  font-weight: 700;
+  border: none;
+  border-radius: 16px;
+  padding: 13px 36px;
+  font-size: 1.15rem;
+  cursor: pointer;
+  box-shadow: 0 5px 22px rgba(175, 144, 211, 0.5);
+  transition: background 0.3s ease, transform 0.3s ease;
+  margin-top: 20px;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(90deg, #b99de3 0%, #89bbf0 100%);
+  transform: translateY(-3px);
+}
+
+.yorkshire-image-container {
+  flex: 1 1 460px;
+  max-width: 480px;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 14px 42px rgba(157, 139, 200, 0.3);
+}
+
+.yorkshire-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 22px;
+  transition: transform 0.35s ease;
+}
+
+.yorkshire-image-container:hover .yorkshire-image {
+  transform: scale(1.06);
+}
+
+@media (max-width: 900px) {
+  .yorkshire-promo-section {
+    flex-direction: column-reverse;
+    padding: 32px 24px;
+    gap: 32px;
+  }
+
+  .yorkshire-text, .yorkshire-image-container {
+    max-width: 100%;
+  }
+
+  .yorkshire-text h2 {
+    font-size: 2.3rem;
+  }
+
+  .yorkshire-text {
+    font-size: 1.1rem;
+  }
+
+  .btn-primary {
+    padding: 12px 28px;
+    font-size: 1rem;
+  }
+}
