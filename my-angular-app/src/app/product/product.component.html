@@ -16,7 +16,7 @@
       {{ product.category }}
     </div>
 
-    <h3 class="product-name">{{ product.name }}</h3>
+    <h2 class="product-name">{{ product.name }}</h2>
 
     <p class="product-description" *ngIf="product.description">
       {{ product.description }}
@@ -36,7 +36,7 @@
     </div>
 
     <div class="product-price">
-      <span class="price-amount">{{ product.price }}</span>
+      <span class="ct">{{ product.price }}</span>
       <span class="product-price-currency">PLN</span>
       <span class="price-original" *ngIf="product.originalPrice">
         {{ product.originalPrice }} PLN

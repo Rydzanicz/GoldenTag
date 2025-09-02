@@ -1,0 +1,49 @@
+.cookie-banner {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #f8f4ec;
+  color: #5a4f7a;
+  box-shadow: 0 8px 24px rgba(180, 162, 225, 0.35);
+  padding: 18px 28px;
+  border-radius: 30px;
+  max-width: 500px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  z-index: 10000;
+}
+
+.cookie-banner p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.cookie-banner p a {
+  color: #6b5b8a;
+  text-decoration: underline;
+}
+
+.cookie-banner p a:hover {
+  color: #8d73aa;
+}
+
+.cookie-banner button {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  border: none;
+  border-radius: 18px;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-weight: 700;
+  color: #000000;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.cookie-banner button:hover {
+  background: linear-gradient(90deg, #b89de0 0%, #89bbf0 100%);
+  transform: translateY(-3px);
+}

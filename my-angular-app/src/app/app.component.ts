@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {RouterOutlet} from '@angular/router';
 import {HeaderComponent} from './header/header.component';
 import {FooterComponent} from './footer/footer.component';
+import {CookieComponent} from './cookie/cookie.component';
 
 export interface Toast {
   id: number;
@@ -16,13 +17,12 @@ export interface Toast {
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, CookieComponent],
   standalone: true
 })
 export class AppComponent implements OnInit {
 
   title = 'GoldenTag';
-  isLoading = false;
   toasts: Toast[] = [];
   private toastIdCounter = 0;
 
@@ -55,23 +55,5 @@ export class AppComponent implements OnInit {
     if (index > -1) {
       this.toasts.splice(index, 1);
     }
-  }
-
-  getToastIcon(type: Toast['type']): string {
-    switch (type) {
-      case 'success':
-        return 'check_circle';
-      case 'error':
-        return 'error';
-      case 'warning':
-        return 'warning';
-      case 'info':
-      default:
-        return 'info';
-    }
-  }
-
-  trackByToast(index: number, toast: Toast): number {
-    return toast.id;
   }
 }
