@@ -83,9 +83,24 @@ export class ShopComponent implements OnInit {
     this.sortProducts();
   }
 
+  // POPRAWIONA METODA - PRZEKAZUJE WSZYSTKIE DANE PRODUKTU
   onProductClick(product: Product) {
     if (this.isBrowser) {
-      this.router.navigate(['/product', product.id]);
+      // Przekaż wszystkie dane produktu przez queryParams
+      this.router.navigate(['/product', product.id], {
+        queryParams: {
+          name: product.name,
+          description: product.description,
+          descriptionDetails: product.descriptionDetails,
+          price: product.price,
+          originalPrice: product.originalPrice,
+          image: JSON.stringify(product.image),
+          category: product.category,
+          badge: product.badge,
+          rating: product.rating,
+          ratingCount: product.ratingCount
+        }
+      });
     }
   }
 
@@ -111,16 +126,13 @@ export class ShopComponent implements OnInit {
       const aInWishlist = wishlistIds.includes(a.id);
       const bInWishlist = wishlistIds.includes(b.id);
 
-      // Produkty z wishlisty na początku
       if (aInWishlist && !bInWishlist) return -1;
       if (!aInWishlist && bInWishlist) return 1;
 
-      // Jeśli oba są w wishlist, sortuj według kolejności w wishlist
       if (aInWishlist && bInWishlist) {
         return wishlistIds.indexOf(a.id) - wishlistIds.indexOf(b.id);
       }
 
-      // Jeśli żaden nie jest w wishlist, zachowaj oryginalną kolejność
       return this.originalProductOrder.indexOf(a) - this.originalProductOrder.indexOf(b);
     });
   }

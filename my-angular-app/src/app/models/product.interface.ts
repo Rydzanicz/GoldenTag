@@ -8,7 +8,6 @@ export interface Product {
   image: string[];
   category?: string;
   badge?: string;
-  materials?: string;
   rating?: number;
   ratingCount?: number;
   isInWishlist?: boolean;
@@ -20,6 +19,5 @@ export interface CartItem {
   price: number;
   image: string;
   category?: string;
-  materials?: string;
   quantity: number;
 }

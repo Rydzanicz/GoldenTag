@@ -12,13 +12,11 @@
   align-items: start;
 }
 
-/* Lewa strona - Podgląd produktu */
 .product-preview-section {
   position: sticky;
   top: 20px;
 }
 
-/* Prawa strona - Szczegóły produktu */
 .product-info-section {
   background: white;
   padding: 40px;
@@ -26,7 +24,6 @@
   box-shadow: 0 8px 24px rgba(190, 175, 210, 0.15);
 }
 
-/* Nagłówek produktu */
 .breadcrumb {
   color: #888;
   margin-bottom: 16px;
@@ -62,7 +59,6 @@
   font-size: 14px;
 }
 
-/* Sekcja cen */
 .pricing-section {
   margin-bottom: 32px;
   padding-bottom: 24px;
@@ -89,7 +85,6 @@
   font-weight: 600;
 }
 
-/* Opis produktu */
 .product-description {
   margin-bottom: 32px;
 }
@@ -112,7 +107,6 @@
   color: #777;
 }
 
-/* Opcje produktu */
 .product-options {
   margin-bottom: 32px;
 }
@@ -129,7 +123,6 @@
   font-size: 1.1rem;
 }
 
-/* Opcje rozmiaru */
 .size-options {
   display: flex;
   gap: 8px;
@@ -155,7 +148,6 @@
   color: white;
 }
 
-/* Opcje koloru */
 .color-options {
   display: flex;
   gap: 8px;
@@ -183,7 +175,6 @@
   color: white;
 }
 
-/* Kontrolki ilości */
 .quantity-controls {
   display: flex;
   align-items: center;
@@ -220,7 +211,6 @@
   text-align: center;
 }
 
-/* Przyciski akcji */
 .action-buttons {
   display: flex;
   flex-direction: column;
@@ -266,7 +256,6 @@
   color: white;
 }
 
-/* Specyfikacja techniczna */
 .product-specs {
   margin-bottom: 32px;
 }
@@ -299,7 +288,6 @@
   color: #555;
 }
 
-/* Zalety produktu */
 .product-benefits {
   margin-bottom: 32px;
 }
@@ -322,7 +310,6 @@
   font-weight: 500;
 }
 
-/* Responsywność */
 @media (max-width: 1024px) {
   .product-details-layout {
     grid-template-columns: 1fr;
@@ -357,4 +344,37 @@
     padding-right: 24px;
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
   }
+}
+
+.product-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.product-category {
+  background: #f0f0f0;
+  color: #666;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.product-badge {
+  background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.stars .star {
+  margin-right: 2px;
+}
+
+.stars .star.filled {
+  filter: brightness(1.2);
 }

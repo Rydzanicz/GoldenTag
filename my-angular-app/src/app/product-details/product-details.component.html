@@ -2,29 +2,34 @@
 
   <div class="product-details-layout">
 
-    <!-- Lewa strona - Podgląd produktu z personalizacją -->
     <div class="product-preview-section">
       <app-product-preview [product]="product"></app-product-preview>
     </div>
 
-    <!-- Prawa strona - Szczegóły produktu -->
     <div class="product-info-section">
 
-      <!-- Nagłówek produktu -->
       <div class="product-header">
         <div class="breadcrumb">
           <a routerLink="/shop">Sklep</a> / <span>{{ product.name }}</span>
         </div>
+
+        <div class="product-badge" *ngIf="product.badge">
+          {{ product.badge }}
+        </div>
+
         <h1 class="product-title">{{ product.name }}</h1>
-        <div class="product-rating">
+
+        <div class="product-rating" *ngIf="product.rating">
           <div class="stars">
-            ⭐⭐⭐⭐⭐
+            <span *ngFor="let i of [1,2,3,4,5]"
+                  [class]="i <= product.rating ? 'star filled' : 'star'">⭐</span>
           </div>
-          <span class="rating-text">(127 opinii)</span>
+          <span class="rating-text" *ngIf="product.ratingCount">
+            ({{ product.ratingCount }} opinii)
+          </span>
         </div>
       </div>
 
-      <!-- Ceny -->
       <div class="pricing-section">
         <div class="price-current">{{ formatCurrency(product.price) }} PLN</div>
         <div class="price-original" *ngIf="product.originalPrice">
@@ -35,17 +40,14 @@
         </div>
       </div>
 
-      <!-- Opis produktu -->
       <div class="product-description">
         <h3>Opis produktu</h3>
         <p>{{ product.description }}</p>
-        <p class="details">{{ product.descriptionDetails }}</p>
+        <p class="details" *ngIf="product.descriptionDetails">{{ product.descriptionDetails }}</p>
       </div>
 
-      <!-- Opcje produktu -->
       <div class="product-options">
 
-        <!-- Rozmiar -->
         <div class="option-group">
           <label>Rozmiar:</label>
           <div class="size-options">
@@ -59,7 +61,6 @@
           </div>
         </div>
 
-        <!-- Kolor -->
         <div class="option-group">
           <label>Kolor:</label>
           <div class="color-options">
@@ -73,7 +74,6 @@
           </div>
         </div>
 
-        <!-- Ilość -->
         <div class="option-group">
           <label>Ilość:</label>
           <div class="quantity-controls">
@@ -85,7 +85,6 @@
 
       </div>
 
-      <!-- Przyciski akcji -->
       <div class="action-buttons">
         <button (click)="addToCart(product)" class="btn-add-to-cart">
           <span class="icon">🛒</span>
@@ -96,14 +95,9 @@
         </button>
       </div>
 
-      <!-- Specyfikacja techniczna -->
       <div class="product-specs">
         <h3>Specyfikacja techniczna</h3>
         <div class="specs-grid">
-          <div class="spec-item">
-            <span class="spec-label">Materiał:</span>
-            <span class="spec-value">{{ product.materials }}</span>
-          </div>
           <div class="spec-item">
             <span class="spec-label">Waga:</span>
             <span class="spec-value">{{ product.weight }}</span>
@@ -119,7 +113,6 @@
         </div>
       </div>
 
-      <!-- Zalety produktu -->
       <div class="product-benefits">
         <h3>Dlaczego warto wybrać ten produkt?</h3>
         <ul>
@@ -131,9 +124,6 @@
           <li>🚚 Darmowa dostawa przy zamówieniach powyżej 300 PLN</li>
         </ul>
       </div>
-
     </div>
-
   </div>
-
 </div>

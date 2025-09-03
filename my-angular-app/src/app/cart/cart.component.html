@@ -37,9 +37,6 @@
               <div class="cart-item-category" *ngIf="item.category">
                 {{ item.category }}
               </div>
-              <div class="cart-item-materials" *ngIf="item.materials">
-                <strong>Materiały:</strong> {{ item.materials }}
-              </div>
               <div class="cart-item-price">
                 <span class="price-single">{{ item.price }} PLN</span>
                 <span class="price-multiply" *ngIf="item.quantity > 1"> × {{ item.quantity }}</span>

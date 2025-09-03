@@ -16,8 +16,6 @@ import {FormsModule} from '@angular/forms';
 })
 export class ProductDetailsComponent implements OnInit {
   product: any = null;
-  currentImageIndex = 0;
-  isZoomed = false;
   selectedSize = 'M';
   selectedColor = 'Srebrny';
   quantity = 1;
@@ -33,42 +31,24 @@ export class ProductDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
+      const productId = +this.route.snapshot.paramMap.get('id')!;
+
       this.product = {
-        id: +this.route.snapshot.paramMap.get('id')!,
+        id: productId,
         name: params['name'] || 'Luksusowa adresówka z diamentami',
         description: params['description'] || 'Ekskluzywna adresówka z prawdziwymi diamentami',
         descriptionDetails: params['descriptionDetails'] || 'Adresówka wykonana z najwyższej jakości materiałów, ręcznie zdobiona prawdziwymi diamentami. Każdy egzemplarz jest unikalny i powstaje w procesie rzemieślniczym.',
-        price: params['price'] || 299.99,
-        originalPrice: params['originalPrice'] || 349.99,
+        price: params['price'] ? +params['price'] : 299.99,
+        originalPrice: params['originalPrice'] ? +params['originalPrice'] : null,
         image: params['image'] ? JSON.parse(params['image']) : ['assets/diamond-tag.jpg'],
-        materials: 'Srebro 925, diamenty naturalne',
+        category: params['category'] || null,
+        badge: params['badge'] || null,
+        rating: params['rating'] ? +params['rating'] : null,
+        ratingCount: params['ratingCount'] ? +params['ratingCount'] : null,
         weight: '12g',
         dimensions: '35mm x 20mm'
       };
     });
-  }
-
-  prevImage(): void {
-    if (this.product && this.product.image) {
-      this.currentImageIndex =
-        (this.currentImageIndex - 1 + this.product.image.length) %
-        this.product.image.length;
-    }
-  }
-
-  nextImage(): void {
-    if (this.product && this.product.image) {
-      this.currentImageIndex =
-        (this.currentImageIndex + 1) % this.product.image.length;
-    }
-  }
-
-  zoomImage(): void {
-    this.isZoomed = true;
-  }
-
-  closeZoom(): void {
-    this.isZoomed = false;
   }
 
   formatCurrency(price: number): string {
@@ -128,7 +108,6 @@ export class ProductDetailsComponent implements OnInit {
       window.dispatchEvent(storageEvent);
     }
 
-    // Pokaż komunikat o dodaniu do koszyka
     alert(`Dodano ${this.quantity}x ${this.product.name} do koszyka!`);
 
     console.log('Product added to cart:', cartItem);
