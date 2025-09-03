@@ -16,19 +16,20 @@ export class ProductPreviewComponent implements OnInit {
   backText: string = '';
 
   showFront: boolean = true;
-  maxFrontChars: number = 12;
-  maxBackChars: number = 40;
+  selectedShape: string = 'bone';
+  maxFrontChars: number = 10;
+  maxBackChars: number = 20;
+
+  availableShapes = [
+    {id: 'bone', name: 'Kość', image: 'assets/kosci.webp'},
+    {id: 'circle', name: 'Okrągła', image: 'assets/okrogle.webp'}
+  ];
 
   ngOnInit() {
-
     if (this.product) {
       this.frontText = 'Milka';
-      this.backText = '123-456-790';
+      this.backText = '123 456 780';
     }
-  }
-
-  toggleSide() {
-    this.showFront = !this.showFront;
   }
 
   get isFrontTextValid(): boolean {
@@ -45,5 +46,15 @@ export class ProductPreviewComponent implements OnInit {
 
   get displayBackText(): string {
     return this.backText.substring(0, this.maxBackChars);
+  }
+
+  get currentTagImage(): string {
+    const shape = this.availableShapes.find(s => s.id === this.selectedShape);
+    return shape ? shape.image : this.availableShapes[0].image;
+  }
+
+  get currentShapeName(): string {
+    const shape = this.availableShapes.find(s => s.id === this.selectedShape);
+    return shape ? shape.name : this.availableShapes[0].name;
   }
 }

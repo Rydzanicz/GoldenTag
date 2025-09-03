@@ -1,7 +1,21 @@
 <div class="product-preview-container">
 
+  <div class="shape-selection">
+    <h3>Wybierz kształt adresówki</h3>
+    <div class="shape-selector">
+      <button
+        *ngFor="let shape of availableShapes"
+        [class.active]="selectedShape === shape.id"
+        (click)="selectedShape = shape.id"
+        class="shape-btn">
+        <img [src]="shape.image" [alt]="shape.name" class="shape-preview">
+        <span class="shape-name">{{ shape.name }}</span>
+      </button>
+    </div>
+  </div>
+
   <div class="tag-preview-section">
-    <h3>Podgląd adresówki</h3>
+    <h3>Podgląd adresówki - {{ currentShapeName }}</h3>
 
     <div class="side-toggle">
       <button
@@ -18,40 +32,32 @@
       </button>
     </div>
 
-    <div class="tag-container">
-      <div class="tag-3d" [class.flipped]="!showFront">
+    <div class="tag-container-real" [class]="'shape-' + selectedShape">
+      <div class="tag-3d-real" [class.flipped]="!showFront">
 
-        <!-- Przednia strona -->
-        <div class="tag-side tag-front">
-          <div class="tag-shape">
-            <div class="paw-icon">🐾</div>
+        <div class="tag-side-real tag-front-real">
+          <img [src]="currentTagImage" [alt]="currentShapeName" class="tag-image">
+          <div class="text-overlay front-overlay">
             <div class="engraved-text front-text">
               {{ displayFrontText || 'Imię pupila' }}
-            </div>
-            <div class="decorative-elements">
-              <div class="diamond diamond-1">💎</div>
-              <div class="diamond diamond-2">💎</div>
             </div>
           </div>
         </div>
 
-        <!-- Tylna strona -->
-        <div class="tag-side tag-back">
-          <div class="tag-shape">
+        <div class="tag-side-real tag-back-real">
+          <img [src]="currentTagImage" [alt]="currentShapeName" class="tag-image">
+          <div class="text-overlay back-overlay">
             <div class="engraved-text back-text">
-              <div class="text-line">{{ displayBackText.split('\n')[0] || 'Numer telefonu' }}</div>
-              <div class="text-line" *ngIf="displayBackText.includes('\n')">
-                {{ displayBackText.split('\n')[1] }}
+              <div class="text-line" *ngFor="let line of displayBackText.split('\n'); let i = index">
+                {{ line || (i === 0 ? 'Numer telefonu' : '') }}
               </div>
             </div>
-            <div class="decorative-border"></div>
           </div>
         </div>
 
       </div>
     </div>
 
-    <!-- Informacja o aktualnej stronie -->
     <div class="current-side-info">
       <span class="side-indicator">
         {{ showFront ? 'Strona przednia' : 'Strona tylna' }}
@@ -59,11 +65,9 @@
     </div>
   </div>
 
-  <!-- Panel personalizacji -->
   <div class="personalization-panel">
     <h3>Personalizacja</h3>
 
-    <!-- Tekst przedni -->
     <div class="input-group">
       <label for="frontText">
         Tekst na przodzie (max {{ maxFrontChars }} znaków):
@@ -81,7 +85,6 @@
       </div>
     </div>
 
-    <!-- Tekst tylny -->
     <div class="input-group">
       <label for="backText">
         Tekst na tyle (max {{ maxBackChars }} znaków):
@@ -99,21 +102,9 @@
       </div>
     </div>
 
-    <!-- Podgląd w czasie rzeczywistym -->
     <div class="live-preview-info">
       <div class="info-icon">ℹ️</div>
       <span>Tekst aktualizuje się w czasie rzeczywistym</span>
     </div>
-
-    <!-- Przyciski szybkich akcji -->
-    <div class="quick-actions">
-      <button (click)="frontText = ''; backText = ''" class="clear-btn">
-        Wyczyść tekst
-      </button>
-      <button (click)="toggleSide()" class="flip-btn">
-        Obróć adresówkę
-      </button>
-    </div>
   </div>
-
 </div>
