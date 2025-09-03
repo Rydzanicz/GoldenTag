@@ -6,10 +6,10 @@
       <a routerLink="/cart">Koszyk</a> /
       <span>Podsumowanie</span>
     </div>
-    <h2 class="summary-title">
+    <h1 class="summary-title">
       <span class="summary-icon">📋</span>
       Podsumowanie zamówienia
-    </h2>
+    </h1>
   </div>
 
   <div class="summary-content">
@@ -169,6 +169,36 @@
           <div class="form-help">Podaj jeśli potrzebujesz faktury VAT</div>
         </div>
 
+        <!-- Akceptacja regulaminu -->
+        <div class="form-group terms-group">
+          <div class="checkbox-wrapper">
+            <input
+              id="acceptTerms"
+              type="checkbox"
+              [(ngModel)]="acceptTerms"
+              name="acceptTerms"
+              required
+              class="terms-checkbox">
+            <label for="acceptTerms" class="terms-label">
+              <span class="checkbox-custom"></span>
+              <span class="terms-text">
+                Akceptuję
+                <a routerLink="/terms" target="_blank" class="terms-link">
+                  regulamin sklepu
+                </a>
+                oraz
+                <a routerLink="/privacy" target="_blank" class="terms-link">
+                  politykę prywatności
+                </a> *
+              </span>
+            </label>
+          </div>
+          <div class="form-error" *ngIf="!acceptTerms && buyerForm?.submitted">
+            Musisz zaakceptować regulamin, aby złożyć zamówienie
+          </div>
+        </div>
+
+        <!-- Przyciski -->
         <div class="form-actions">
           <button type="button" (click)="goBackToCart()" class="btn-back">
             ← Wróć do koszyka
@@ -177,12 +207,16 @@
           <button
             type="submit"
             class="btn-submit"
-            [disabled]="!buyerForm.form.valid">
+            [disabled]="!canSubmitOrder">
             <span class="submit-icon">🛍️</span>
             Złóż zamówienie
           </button>
         </div>
+
       </form>
+
     </div>
+
   </div>
+
 </div>

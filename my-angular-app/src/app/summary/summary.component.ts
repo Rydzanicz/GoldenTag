@@ -1,7 +1,7 @@
-import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component, Inject, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormsModule} from '@angular/forms';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
+import {FormsModule, NgForm} from '@angular/forms';
 import {InvoiceMailerService} from '../services/invoice-mailer.service';
 import {CartItem} from '../models/product.interface';
 
@@ -12,10 +12,13 @@ import {CartItem} from '../models/product.interface';
   styleUrls: ['./summary.component.css'],
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
+    RouterModule
   ]
 })
 export class SummaryComponent implements OnInit {
+  @ViewChild('buyerForm') buyerForm!: NgForm;
+
   cartItems: CartItem[] = [];
   isBrowser: boolean;
   note = '';
@@ -34,6 +37,8 @@ export class SummaryComponent implements OnInit {
   buyerPhone: string = '';
   emailError: boolean = false;
 
+  acceptTerms: boolean = false;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private route: ActivatedRoute,
@@ -41,6 +46,19 @@ export class SummaryComponent implements OnInit {
     private invoiceMailerService: InvoiceMailerService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
+  }
+
+  get canSubmitOrder(): boolean {
+    return !!(this.buyerName &&
+      this.buyerName.trim() &&
+      this.buyerAddressEmail &&
+      this.buyerAddressEmail.trim() &&
+      this.buyerAddress &&
+      this.buyerAddress.trim() &&
+      this.buyerPhone &&
+      this.buyerPhone.trim() &&
+      this.acceptTerms &&
+      !this.emailError);
   }
 
   ngOnInit(): void {
@@ -107,6 +125,11 @@ export class SummaryComponent implements OnInit {
       return;
     }
 
+    if (!this.acceptTerms) {
+      alert('Aby złożyć zamówienie, musisz zaakceptować regulamin i politykę prywatności.');
+      return;
+    }
+
     if (!this.buyerAddressEmail.includes('@')) {
       this.emailError = true;
       alert('Proszę podać prawidłowy adres email.');
@@ -124,6 +147,7 @@ export class SummaryComponent implements OnInit {
       shipping: this.shipping,
       discount: this.discount,
       total: this.total,
+      acceptedTerms: this.acceptTerms,
       orders: this.cartItems.map(item => ({
         id: item.id,
         name: item.name,
