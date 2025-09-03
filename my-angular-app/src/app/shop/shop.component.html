@@ -67,12 +67,12 @@
       <p class="shop-subtitle fade-in-up">Odkryj ekskluzywną kolekcję obroży z diamentami i szlachetnymi kamieniami</p>
     </div>
 
-    <div class="products-grid" *ngIf="filteredProducts.length > 0">
+    <div class="products-grid">
       <app-product
         *ngFor="let product of filteredProducts; trackBy: trackByProductId"
         [product]="product"
         (productClick)="onProductClick($event)"
-        class="fade-in-up">
+        (wishlistChanged)="onWishlistChanged()">
       </app-product>
     </div>
   </div>

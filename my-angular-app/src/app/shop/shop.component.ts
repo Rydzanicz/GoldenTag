@@ -5,6 +5,7 @@ import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {LocalStorageService} from '../services/LocalStorageService';
+import {WishlistService} from '../services/WishlistService';
 
 @Component({
   selector: 'app-shop',
@@ -29,7 +30,8 @@ export class ShopComponent implements OnInit {
       image: ['assets/zegar1.jpg'],
       badge: 'Bestseller',
       rating: 5,
-      ratingCount: 45
+      ratingCount: 45,
+      isInWishlist: false
     },
     {
       id: 2,
@@ -41,7 +43,8 @@ export class ShopComponent implements OnInit {
       image: ['assets/zegar2.jpg'],
       badge: 'Bestseller',
       rating: 4,
-      ratingCount: 18
+      ratingCount: 18,
+      isInWishlist: false
     },
     {
       id: 3,
@@ -52,22 +55,32 @@ export class ShopComponent implements OnInit {
       image: ['assets/zegar3.jpg'],
       badge: 'Nowy',
       rating: 4.5,
-      ratingCount: 9
+      ratingCount: 9,
+      isInWishlist: false
     }
   ];
 
   filteredProducts: Product[] = [];
+  originalProductOrder: Product[] = [];
 
   constructor(
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private wishlistService: WishlistService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   ngOnInit() {
-    this.filteredProducts = [...this.products];
+    // Zachowaj oryginalną kolejność
+    this.originalProductOrder = [...this.products];
+
+    // Zaktualizuj status wishlisty dla produktów
+    this.updateProductWishlistStatus();
+
+    // Posortuj produkty
+    this.sortProducts();
   }
 
   onProductClick(product: Product) {
@@ -76,7 +89,39 @@ export class ShopComponent implements OnInit {
     }
   }
 
+  onWishlistChanged() {
+    this.updateProductWishlistStatus();
+    this.sortProducts();
+  }
+
   trackByProductId(index: number, product: Product): number {
     return product.id;
+  }
+
+  private updateProductWishlistStatus() {
+    this.products.forEach(product => {
+      product.isInWishlist = this.wishlistService.isInWishlist(product.id);
+    });
+  }
+
+  private sortProducts() {
+    const wishlistIds = this.wishlistService.getWishlistIds();
+
+    this.filteredProducts = [...this.products].sort((a, b) => {
+      const aInWishlist = wishlistIds.includes(a.id);
+      const bInWishlist = wishlistIds.includes(b.id);
+
+      // Produkty z wishlisty na początku
+      if (aInWishlist && !bInWishlist) return -1;
+      if (!aInWishlist && bInWishlist) return 1;
+
+      // Jeśli oba są w wishlist, sortuj według kolejności w wishlist
+      if (aInWishlist && bInWishlist) {
+        return wishlistIds.indexOf(a.id) - wishlistIds.indexOf(b.id);
+      }
+
+      // Jeśli żaden nie jest w wishlist, zachowaj oryginalną kolejność
+      return this.originalProductOrder.indexOf(a) - this.originalProductOrder.indexOf(b);
+    });
   }
 }

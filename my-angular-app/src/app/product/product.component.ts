@@ -2,6 +2,7 @@ import {Component, EventEmitter, Inject, Input, OnInit, Output, PLATFORM_ID} fro
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {Product} from '../models/product.interface';
 import {LocalStorageService} from '../services/LocalStorageService';
+import {WishlistService} from '../services/WishlistService';
 
 @Component({
   selector: 'app-product',
@@ -12,16 +13,18 @@ import {LocalStorageService} from '../services/LocalStorageService';
 })
 export class ProductComponent implements OnInit {
   @Input() product!: Product;
-  @Output() productClick = new EventEmitter<Product>();
-  @Output() quickView = new EventEmitter<Product>();
-  @Output() toggleWishlist = new EventEmitter<void>();
+  @Output() productClick = new EventEmitter();
+  @Output() quickView = new EventEmitter();
+  @Output() toggleWishlist = new EventEmitter<Product>();
+  @Output() wishlistChanged = new EventEmitter<void>();
 
   isInWishlist = false;
   private isBrowser = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private wishlistService: WishlistService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
@@ -36,11 +39,16 @@ export class ProductComponent implements OnInit {
     this.productClick.emit(this.product);
   }
 
-
   onToggleWishlist(event: Event) {
     event.stopPropagation();
-    this.product.isInWishlist = !this.product.isInWishlist;
-    this.toggleWishlist.emit();
+
+    this.isInWishlist = this.wishlistService.toggleWishlist(this.product.id);
+    this.product.isInWishlist = this.isInWishlist;
+
+    this.updateWishlist();
+
+    this.toggleWishlist.emit(this.product);
+    this.wishlistChanged.emit();
   }
 
   onImageError(event: any) {
@@ -58,9 +66,14 @@ export class ProductComponent implements OnInit {
   private checkWishlistStatus() {
     if (!this.localStorageService.isAvailable) return;
 
-    const wishlistData = this.localStorageService.getItem('wishlist');
-    const wishlist = wishlistData ? JSON.parse(wishlistData) : [];
-    this.isInWishlist = wishlist.some((item: any) => item.id === this.product.id);
+    this.isInWishlist = this.wishlistService.isInWishlist(this.product.id);
+    this.product.isInWishlist = this.isInWishlist;
+
+    if (!this.isInWishlist) {
+      const wishlistData = this.localStorageService.getItem('wishlist');
+      const wishlist = wishlistData ? JSON.parse(wishlistData) : [];
+      this.isInWishlist = wishlist.some((item: any) => item.id === this.product.id);
+    }
   }
 
   private updateWishlist() {
@@ -71,7 +84,7 @@ export class ProductComponent implements OnInit {
 
     if (this.isInWishlist) {
       if (!wishlist.some((item: any) => item.id === this.product.id)) {
-        wishlist.push(this.product);
+        wishlist.unshift(this.product);
       }
     } else {
       wishlist = wishlist.filter((item: any) => item.id !== this.product.id);
