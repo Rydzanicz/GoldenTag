@@ -142,27 +142,59 @@ export class SummaryComponent implements OnInit {
       buyerAddress: this.buyerAddress,
       buyerNip: this.buyerNip,
       buyerPhone: this.buyerPhone,
+      acceptedTerms: this.acceptTerms,
+
       orderNote: this.note,
+      orderDate: new Date().toISOString(),
+      orderTimestamp: Date.now(),
+      orderNumber: `GF-${Date.now()}`,
       subtotal: this.subtotal,
       shipping: this.shipping,
       discount: this.discount,
       total: this.total,
-      acceptedTerms: this.acceptTerms,
+      currency: 'PLN',
+
+      browserInfo: this.getBrowserInfo(),
+      orderSource: 'web-app',
+
       orders: this.cartItems.map(item => ({
         id: item.id,
         name: item.name,
+        description: item.description || '',
+        category: item.category || 'Adresówki premium',
+
         quantity: item.quantity,
         price: item.price,
-        size: item.size,
-        color: item.color,
-        frontText: item.frontText,
-        backText: item.backText,
-        tagShape: item.tagShape
-      }))
+        originalPrice: item.originalPrice || item.price,
+        itemTotal: item.price * item.quantity,
+
+        size: item.size || 'M',
+        color: item.color || 'Srebrny',
+        tagShape: item.tagShape || 'bone',
+
+        frontText: item.frontText || '',
+        backText: item.backText || '',
+        hasPersonalization: !!(item.frontText || item.backText),
+
+        image: item.image || '',
+        badge: item.badge || '',
+        weight: '12g',
+        dimensions: '35mm x 20mm'
+      })),
+
+      orderSummary: {
+        totalItems: this.cartItemCount,
+        uniqueProducts: this.cartItems.length,
+        hasPersonalizedItems: this.cartItems.some(item => item.frontText || item.backText),
+        averageItemPrice: this.subtotal / this.cartItemCount,
+        shippingMethod: this.shipping > 0 ? 'PAID' : 'FREE',
+        paymentMethod: 'ONLINE'
+      }
     };
 
     this.invoiceMailerService.sendBuyerData(request).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('Backend response:', response);
         alert('Zamówienie zostało złożone pomyślnie! Dziękujemy za zakup.');
         this.clearOrderData();
         this.navigateToShop();
@@ -172,6 +204,19 @@ export class SummaryComponent implements OnInit {
         alert('Wystąpił błąd podczas składania zamówienia. Spróbuj ponownie.');
       }
     });
+  }
+
+  private getBrowserInfo(): any {
+    if (!this.isBrowser) return {};
+
+    return {
+      userAgent: navigator.userAgent,
+      language: navigator.language,
+      platform: navigator.platform,
+      screenResolution: `${screen.width}x${screen.height}`,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      timestamp: new Date().toISOString()
+    };
   }
 
   navigateToShop() {

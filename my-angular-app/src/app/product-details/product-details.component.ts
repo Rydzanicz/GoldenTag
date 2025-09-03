@@ -83,29 +83,33 @@ export class ProductDetailsComponent implements OnInit {
     let tagShape = 'bone';
 
     if (productPreview) {
-      const frontInput = productPreview.querySelector('input[placeholder="Imię pupila"]') as HTMLInputElement;
+      const frontInput = productPreview.querySelector('input[placeholder*="Imię"]') as HTMLInputElement;
       const backInput = productPreview.querySelector('textarea') as HTMLTextAreaElement;
-      const shapeButtons = productPreview.querySelectorAll('.shape-btn.active');
+      const activeShapeBtn = productPreview.querySelector('.shape-btn.active') as HTMLElement;
 
       if (frontInput) frontText = frontInput.value;
       if (backInput) backText = backInput.value;
-      if (shapeButtons.length > 0) {
-        const activeShape = shapeButtons[0].getAttribute('data-shape');
-        tagShape = activeShape || 'bone';
+      if (activeShapeBtn) {
+        tagShape = activeShapeBtn.getAttribute('data-shape') || 'bone';
       }
     }
 
     const cartItem = {
       id: this.product.id,
       name: this.product.name,
+      description: this.product.description,
       price: this.product.price,
+      originalPrice: this.product.originalPrice,
       quantity: this.quantity,
       size: this.selectedSize,
       color: this.selectedColor,
       image: this.product.image[0],
-      category: this.product.category,
-      frontText: frontText || '',
-      backText: backText || '',
+      category: this.product.category || 'Adresówki premium',
+      badge: this.product.badge,
+      weight: this.product.weight || '12g',
+      dimensions: this.product.dimensions || '35mm x 20mm',
+      frontText: frontText,
+      backText: backText,
       tagShape: tagShape
     };
 
@@ -116,7 +120,8 @@ export class ProductDetailsComponent implements OnInit {
       item.size === this.selectedSize &&
       item.color === this.selectedColor &&
       item.frontText === frontText &&
-      item.backText === backText
+      item.backText === backText &&
+      item.tagShape === tagShape
     );
 
     if (existingItemIndex > -1) {
@@ -132,7 +137,6 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     alert(`Dodano ${this.quantity}x ${this.product.name} do koszyka!`);
-    console.log('Product added to cart:', cartItem);
   }
 
   goToCart(): void {
