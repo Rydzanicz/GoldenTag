@@ -31,12 +31,16 @@
         Tył
       </button>
     </div>
-
     <div class="tag-container-real" [class]="'shape-' + selectedShape">
       <div class="tag-3d-real" [class.flipped]="!showFront">
 
         <div class="tag-side-real tag-front-real">
           <img [src]="currentTagImage" [alt]="currentShapeName" class="tag-image">
+
+          <div class="image-caption">
+            Zdjęcie poglądowe
+          </div>
+
           <div class="text-overlay front-overlay">
             <div class="engraved-text front-text">
               {{ displayFrontText || 'Imię pupila' }}
@@ -46,6 +50,11 @@
 
         <div class="tag-side-real tag-back-real">
           <img [src]="currentTagImage" [alt]="currentShapeName" class="tag-image">
+
+          <div class="image-caption">
+            Zdjęcie poglądowe
+          </div>
+
           <div class="text-overlay back-overlay">
             <div class="engraved-text back-text">
               <div class="text-line" *ngFor="let line of displayBackText.split('\n'); let i = index">
@@ -54,9 +63,9 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
+
 
     <div class="current-side-info">
       <span class="side-indicator">
