@@ -73,20 +73,15 @@ export class ShopComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Zachowaj oryginalną kolejność
     this.originalProductOrder = [...this.products];
 
-    // Zaktualizuj status wishlisty dla produktów
     this.updateProductWishlistStatus();
 
-    // Posortuj produkty
     this.sortProducts();
   }
 
-  // POPRAWIONA METODA - PRZEKAZUJE WSZYSTKIE DANE PRODUKTU
   onProductClick(product: Product) {
     if (this.isBrowser) {
-      // Przekaż wszystkie dane produktu przez queryParams
       this.router.navigate(['/product', product.id], {
         queryParams: {
           name: product.name,

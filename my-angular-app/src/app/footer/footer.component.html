@@ -17,10 +17,15 @@
     </div>
 
     <div class="footer-section">
-      <h3>Kontakt</h3>
-      <div class="contact-item">
-        <span class="material-icons">email</span>
-        <span>  rydzanicz.mm&#64;gmail.com</span>
+      <div class="socially-fomo-bar" aria-live="polite" aria-atomic="true" aria-relevant="additions">
+        <div class="marquee" #marquee>
+          <ng-container *ngFor="let list of [recentPurchases, recentPurchases]">
+            <div *ngFor="let purchase of recentPurchases" class="purchase-alert">
+              <strong>{{ purchase.customerInitials }}</strong> z <strong>{{ purchase.city }}</strong>
+              właśnie kupił <em>{{ purchase.productName }}</em> 🛍️ <strong>{{ purchase.timeAgo }}</strong>
+            </div>
+          </ng-container>
+        </div>
       </div>
     </div>
   </div>
