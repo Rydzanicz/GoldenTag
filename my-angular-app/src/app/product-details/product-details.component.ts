@@ -104,12 +104,10 @@ export class ProductDetailsComponent implements OnInit {
     localStorage.setItem('cart', JSON.stringify(cart));
 
     if (typeof window !== 'undefined') {
-      const storageEvent = new StorageEvent('storage', {key: 'cart'});
-      window.dispatchEvent(storageEvent);
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
     }
 
     alert(`Dodano ${this.quantity}x ${this.product.name} do koszyka!`);
-
     console.log('Product added to cart:', cartItem);
   }
 

@@ -30,6 +30,11 @@ export class HeaderComponent implements OnInit {
       window.addEventListener('cartUpdated', () => {
         this.updateCartCount();
       });
+      window.addEventListener('storage', (event) => {
+        if (event.key === 'cart') {
+          this.updateCartCount();
+        }
+      });
     }
   }
 
