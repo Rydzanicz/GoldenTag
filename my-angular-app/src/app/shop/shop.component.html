@@ -72,7 +72,6 @@
         *ngFor="let product of filteredProducts; trackBy: trackByProductId"
         [product]="product"
         (productClick)="onProductClick($event)"
-        (addToCart)="onAddToCart($event)"
         class="fade-in-up">
       </app-product>
     </div>

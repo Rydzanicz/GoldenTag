@@ -11,6 +11,7 @@ export interface Product {
   materials?: string;
   rating?: number;
   ratingCount?: number;
+  isInWishlist?: boolean;
 }
 
 export interface CartItem {

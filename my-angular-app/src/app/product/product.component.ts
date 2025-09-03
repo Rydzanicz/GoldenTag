@@ -13,11 +13,9 @@ import {LocalStorageService} from '../services/LocalStorageService';
 export class ProductComponent implements OnInit {
   @Input() product!: Product;
   @Output() productClick = new EventEmitter<Product>();
-  @Output() addToCart = new EventEmitter<Product>();
-  @Output() toggleWishlist = new EventEmitter<Product>();
   @Output() quickView = new EventEmitter<Product>();
+  @Output() toggleWishlist = new EventEmitter<void>();
 
-  isAddingToCart = false;
   isInWishlist = false;
   private isBrowser = false;
 
@@ -38,24 +36,11 @@ export class ProductComponent implements OnInit {
     this.productClick.emit(this.product);
   }
 
-  onAddToCart(event: Event) {
-    event.stopPropagation();
-    this.isAddingToCart = true;
-
-    setTimeout(() => {
-      this.addToCart.emit(this.product);
-      this.isAddingToCart = false;
-    }, 500);
-  }
 
   onToggleWishlist(event: Event) {
     event.stopPropagation();
-
-    if (!this.isBrowser) return;
-
-    this.isInWishlist = !this.isInWishlist;
-    this.updateWishlist();
-    this.toggleWishlist.emit(this.product);
+    this.product.isInWishlist = !this.product.isInWishlist;
+    this.toggleWishlist.emit();
   }
 
   onImageError(event: any) {

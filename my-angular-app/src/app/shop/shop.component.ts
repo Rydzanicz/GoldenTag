@@ -76,44 +76,7 @@ export class ShopComponent implements OnInit {
     }
   }
 
-  onAddToCart(product: Product) {
-    this.addToCartService(product);
-    if (this.isBrowser) {
-      this.showToast('Produkt dodany do koszyka', 'success');
-    }
-  }
-
   trackByProductId(index: number, product: Product): number {
     return product.id;
-  }
-
-  private addToCartService(product: Product) {
-    if (!this.localStorageService.isAvailable) return;
-
-    const cartData = this.localStorageService.getItem('cart');
-    const cart = cartData ? JSON.parse(cartData) : [];
-
-    const existingItemIndex = cart.findIndex((item: any) => item.id === product.id);
-
-    if (existingItemIndex > -1) {
-      cart[existingItemIndex].quantity += 1;
-    } else {
-      cart.push({...product, quantity: 1});
-    }
-
-    this.localStorageService.setItem('cart', JSON.stringify(cart));
-
-    if (this.isBrowser) {
-      window.dispatchEvent(new CustomEvent('cartUpdated'));
-    }
-  }
-
-  private showToast(message: string, type: 'success' | 'error' | 'info') {
-    if (this.isBrowser) {
-      const event = new CustomEvent('showToast', {
-        detail: {message, type}
-      });
-      window.dispatchEvent(event);
-    }
   }
 }
