@@ -1,0 +1,119 @@
+<div class="product-preview-container">
+
+  <div class="tag-preview-section">
+    <h3>Podgląd adresówki</h3>
+
+    <div class="side-toggle">
+      <button
+        [class.active]="showFront"
+        (click)="showFront = true"
+        class="toggle-btn">
+        Przód
+      </button>
+      <button
+        [class.active]="!showFront"
+        (click)="showFront = false"
+        class="toggle-btn">
+        Tył
+      </button>
+    </div>
+
+    <div class="tag-container">
+      <div class="tag-3d" [class.flipped]="!showFront">
+
+        <!-- Przednia strona -->
+        <div class="tag-side tag-front">
+          <div class="tag-shape">
+            <div class="paw-icon">🐾</div>
+            <div class="engraved-text front-text">
+              {{ displayFrontText || 'Imię pupila' }}
+            </div>
+            <div class="decorative-elements">
+              <div class="diamond diamond-1">💎</div>
+              <div class="diamond diamond-2">💎</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tylna strona -->
+        <div class="tag-side tag-back">
+          <div class="tag-shape">
+            <div class="engraved-text back-text">
+              <div class="text-line">{{ displayBackText.split('\n')[0] || 'Numer telefonu' }}</div>
+              <div class="text-line" *ngIf="displayBackText.includes('\n')">
+                {{ displayBackText.split('\n')[1] }}
+              </div>
+            </div>
+            <div class="decorative-border"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Informacja o aktualnej stronie -->
+    <div class="current-side-info">
+      <span class="side-indicator">
+        {{ showFront ? 'Strona przednia' : 'Strona tylna' }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Panel personalizacji -->
+  <div class="personalization-panel">
+    <h3>Personalizacja</h3>
+
+    <!-- Tekst przedni -->
+    <div class="input-group">
+      <label for="frontText">
+        Tekst na przodzie (max {{ maxFrontChars }} znaków):
+      </label>
+      <input
+        id="frontText"
+        type="text"
+        [(ngModel)]="frontText"
+        [maxlength]="maxFrontChars"
+        [class.invalid]="!isFrontTextValid"
+        class="text-input"
+        placeholder="Imię pupila">
+      <div class="char-counter" [class.over-limit]="!isFrontTextValid">
+        {{ frontText.length }} / {{ maxFrontChars }}
+      </div>
+    </div>
+
+    <!-- Tekst tylny -->
+    <div class="input-group">
+      <label for="backText">
+        Tekst na tyle (max {{ maxBackChars }} znaków):
+      </label>
+      <textarea
+        id="backText"
+        [(ngModel)]="backText"
+        [maxlength]="maxBackChars"
+        [class.invalid]="!isBackTextValid"
+        class="text-input"
+        rows="3"
+        placeholder="Numer telefonu&#10;Adres e-mail"></textarea>
+      <div class="char-counter" [class.over-limit]="!isBackTextValid">
+        {{ backText.length }} / {{ maxBackChars }}
+      </div>
+    </div>
+
+    <!-- Podgląd w czasie rzeczywistym -->
+    <div class="live-preview-info">
+      <div class="info-icon">ℹ️</div>
+      <span>Tekst aktualizuje się w czasie rzeczywistym</span>
+    </div>
+
+    <!-- Przyciski szybkich akcji -->
+    <div class="quick-actions">
+      <button (click)="frontText = ''; backText = ''" class="clear-btn">
+        Wyczyść tekst
+      </button>
+      <button (click)="toggleSide()" class="flip-btn">
+        Obróć adresówkę
+      </button>
+    </div>
+  </div>
+
+</div>

@@ -1,32 +1,49 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CommonModule} from "@angular/common";
+import {ProductPreviewComponent} from '../product-preview/product-preview.component';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details.component.html',
-  imports: [
-    CommonModule
-  ],
   styleUrls: ['./product-details.component.css'],
+  imports: [
+    CommonModule,
+    ProductPreviewComponent,
+    FormsModule
+  ]
 })
 export class ProductDetailsComponent implements OnInit {
   product: any = null;
   currentImageIndex = 0;
   isZoomed = false;
+  selectedSize = 'M';
+  selectedColor = 'Srebrny';
+  quantity = 1;
 
-  constructor(private route: ActivatedRoute) {
+  availableSizes = ['S', 'M', 'L'];
+  availableColors = ['Srebrny', 'Złoty', 'Różowe złoto'];
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
   }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.product = {
         id: +this.route.snapshot.paramMap.get('id')!,
-        name: params['name'] || null,
-        description: params['description'] || null,
-        descriptionDetails: params['descriptionDetails'] || null,
-        price: params['price'] || null,
-        image: params['image'] ? JSON.parse(params['image']) : []
+        name: params['name'] || 'Luksusowa adresówka z diamentami',
+        description: params['description'] || 'Ekskluzywna adresówka z prawdziwymi diamentami',
+        descriptionDetails: params['descriptionDetails'] || 'Adresówka wykonana z najwyższej jakości materiałów, ręcznie zdobiona prawdziwymi diamentami. Każdy egzemplarz jest unikalny i powstaje w procesie rzemieślniczym.',
+        price: params['price'] || 299.99,
+        originalPrice: params['originalPrice'] || 349.99,
+        image: params['image'] ? JSON.parse(params['image']) : ['assets/diamond-tag.jpg'],
+        materials: 'Srebro 925, diamenty naturalne',
+        weight: '12g',
+        dimensions: '35mm x 20mm'
       };
     });
   }
@@ -64,6 +81,16 @@ export class ProductDetailsComponent implements OnInit {
       .replace(' zł', '');
   }
 
+  increaseQuantity(): void {
+    this.quantity++;
+  }
+
+  decreaseQuantity(): void {
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
+  }
+
   addToCart(product: any): void {
     if (!this.product) {
       console.error('Product not found. Unable to add to cart.');
@@ -74,14 +101,22 @@ export class ProductDetailsComponent implements OnInit {
       id: this.product.id,
       name: this.product.name,
       price: this.product.price,
-      quantity: 1,
+      quantity: this.quantity,
+      size: this.selectedSize,
+      color: this.selectedColor,
+      image: this.product.image[0]
     };
 
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-    const existingItem = cart.find((item: any) => item.id === this.product.id);
-    if (existingItem) {
-      existingItem.quantity += 1;
+    const existingItemIndex = cart.findIndex((item: any) =>
+      item.id === this.product.id &&
+      item.size === this.selectedSize &&
+      item.color === this.selectedColor
+    );
+
+    if (existingItemIndex > -1) {
+      cart[existingItemIndex].quantity += this.quantity;
     } else {
       cart.push(cartItem);
     }
@@ -93,7 +128,20 @@ export class ProductDetailsComponent implements OnInit {
       window.dispatchEvent(storageEvent);
     }
 
+    // Pokaż komunikat o dodaniu do koszyka
+    alert(`Dodano ${this.quantity}x ${this.product.name} do koszyka!`);
+
     console.log('Product added to cart:', cartItem);
   }
 
+  goToCart(): void {
+    this.router.navigate(['/cart']);
+  }
+
+  calculateSavings(): number {
+    if (this.product?.originalPrice) {
+      return this.product.originalPrice - this.product.price;
+    }
+    return 0;
+  }
 }
