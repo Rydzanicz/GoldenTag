@@ -1,16 +1,17 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-footer',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css']
+  styleUrls: ['./footer.component.css'],
+  imports: [CommonModule, RouterModule],
+  standalone: true
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit {
 
-  currentYear: number = new Date().getFullYear();
+  currentYear = new Date().getFullYear();
 
   recentPurchases = [
     {customerInitials: 'M.K.', city: 'Warszawa', productName: 'Granaty rodolity', timeAgo: '2 min temu'},
@@ -54,5 +55,8 @@ export class FooterComponent {
 
   getProductViews(productId: number): number {
     return this.productViews.get(productId) ?? 0;
+  }
+
+  ngOnInit() {
   }
 }
