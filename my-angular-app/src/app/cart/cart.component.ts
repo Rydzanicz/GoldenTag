@@ -102,13 +102,31 @@ export class CartComponent implements OnInit {
     }
 
     this.isProcessing = true;
+    if (this.isBrowser) {
+      const orderData = {
+        items: this.cartItems,
+        subtotal: this.getSubtotal(),
+        shipping: this.shipping,
+        discount: this.discount,
+        total: this.getTotalPrice(),
+        orderNote: this.orderNote,
+        timestamp: new Date().toISOString()
+      };
+
+      localStorage.setItem('currentOrder', JSON.stringify(orderData));
+    }
 
     setTimeout(() => {
       if (this.isBrowser) {
-        this.router.navigate(['/checkout']);
+        this.router.navigate(['/summary'], {
+          queryParams: {
+            note: this.orderNote,
+            fromCart: 'true'
+          }
+        });
       }
       this.isProcessing = false;
-    }, 2000);
+    }, 1000);
   }
 
   trackByCartItem(index: number, item: CartItem): number {

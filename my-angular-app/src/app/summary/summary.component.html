@@ -1,129 +1,185 @@
-<div class="container">
-  <div class="content">
-    <div class="left-summary cart-summary">
-      <h3>Podsumowanie Koszyka</h3>
-      <p><strong>Łącznie: {{ cartItemCount }} przedmiotów</strong></p>
-      <p><strong>Łączna Kwota: {{ formatCurrency(getTotalPrice()) }}</strong></p>
-      <p><strong>Notatka:</strong></p>
-      <p class="note"><strong>(Proszę o podanie koloru. Nie podanie oznacza zgodę na wybór losowy):</strong></p>
-      <p class="note scroll-note"><strong>{{ note }}</strong></p>
+<div class="summary-container">
+
+  <div class="summary-header">
+    <div class="breadcrumb">
+      <a routerLink="/shop">Sklep</a> /
+      <a routerLink="/cart">Koszyk</a> /
+      <span>Podsumowanie</span>
     </div>
-    <div class="right-summary buyer-info">
-      <h3>Dane Kupującego</h3>
-      <form #buyerForm="ngForm" class="buyer-form">
+    <h2 class="summary-title">
+      <span class="summary-icon">📋</span>
+      Podsumowanie zamówienia
+    </h2>
+  </div>
 
-        <div class="buyer-form-group">
-          <label for="buyerName">Imię i Nazwisko: *</label>
-          <div class="input-wrapper">
-            <input
-              type="text"
-              id="buyerName"
-              name="buyerName"
-              class="buyer-input"
-              [(ngModel)]="buyerName"
-              placeholder="Wprowadź imię i nazwisko"
-              required
-            />
-            <small class="error"
-                   *ngIf="!buyerForm.controls['buyerName']?.valid && buyerForm.controls['buyerName']?.touched">
-              To pole jest wymagane.
-            </small>
+  <div class="summary-content">
+
+    <div class="order-summary">
+
+      <div class="order-items">
+        <h3 class="section-title">Zamawiane produkty ({{ cartItemCount }})</h3>
+
+        <div *ngFor="let item of cartItems" class="order-item">
+          <div class="item-image">
+            <img [src]="item.image" [alt]="item.name" class="product-img">
+          </div>
+
+          <div class="item-details">
+            <h4 class="item-name">{{ item.name }}</h4>
+
+            <div class="item-options" *ngIf="item.size || item.color || item.tagShape">
+              <span class="option" *ngIf="item.size">{{ item.size }}</span>
+              <span class="option" *ngIf="item.color">{{ item.color }}</span>
+              <span class="option" *ngIf="item.tagShape">{{ item.tagShape === 'bone' ? 'Kość' : 'Okrągła' }}</span>
+            </div>
+
+            <div class="personalization" *ngIf="item.frontText || item.backText">
+              <div class="pers-title">✨ Grawerowanie:</div>
+              <div class="pers-item" *ngIf="item.frontText">
+                Przód: <strong>"{{ item.frontText }}"</strong>
+              </div>
+              <div class="pers-item" *ngIf="item.backText">
+                Tył: <strong>"{{ item.backText }}"</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="item-pricing">
+            <div class="item-quantity">{{ item.quantity }}x</div>
+            <div class="item-price">{{ formatCurrency(item.price) }}</div>
+            <div class="item-total">{{ formatCurrency(getItemTotal(item)) }}</div>
           </div>
         </div>
+      </div>
 
-        <div class="buyer-form-group">
-          <label for="buyerEmail">Adres Email: *</label>
-          <div class="input-wrapper">
-            <input
-              type="email"
-              id="buyerEmail"
-              name="buyerEmail"
-              class="buyer-input"
-              [(ngModel)]="buyerAddressEmail"
-              placeholder="Wprowadź adres email"
-              (ngModelChange)="checkEmailValidation($event)"
-              required
-            />
-            <small class="error"
-                   *ngIf="!buyerForm.controls['buyerEmail']?.valid && buyerForm.controls['buyerEmail']?.touched">
-              Podaj poprawny adres email.
-            </small>
+      <div class="financial-summary">
+        <h3 class="section-title">Podsumowanie kosztów</h3>
 
-            <small class="error" *ngIf="emailError">&#64;
-              jest wymagany w adresie email.</small>
-          </div>
-        </div>
-        <div class="buyer-form-group">
-          <label for="buyerPhone">Numer Telefonu: *</label>
-          <div class="input-wrapper">
-            <input
-              type="tel"
-              id="buyerPhone"
-              name="buyerPhone"
-              class="buyer-input"
-              [(ngModel)]="buyerPhone"
-              placeholder="Wprowadź numer telefonu"
-              pattern="[0-9]{9}"
-              required
-            />
-            <small class="error"
-                   *ngIf="!buyerForm.controls['buyerPhone']?.valid && buyerForm.controls['buyerPhone']?.touched">
-              Wprowadź poprawny numer telefonu (9 cyfr).
-            </small>
-          </div>
-        </div>
-        <div class="buyer-form-group">
-          <label for="buyerAddress">Adres: *</label>
-          <div class="input-wrapper">
-            <input
-              type="text"
-              id="buyerAddress"
-              name="buyerAddress"
-              class="buyer-input"
-              [(ngModel)]="buyerAddress"
-              placeholder="Wprowadź adres"
-              required
-            />
-            <small class="error"
-                   *ngIf="!buyerForm.controls['buyerAddress']?.valid && buyerForm.controls['buyerAddress']?.touched">
-              To pole jest wymagane.
-            </small>
-          </div>
+        <div class="summary-line">
+          <span>Wartość produktów:</span>
+          <span>{{ formatCurrency(subtotal) }}</span>
         </div>
 
-        <div class="buyer-form-group">
-          <label for="buyerNip">NIP (opcjonalnie):</label>
-          <div class="input-wrapper">
-            <input
-              type="text"
-              id="buyerNip"
-              name="buyerNip"
-              class="buyer-input"
-              [(ngModel)]="buyerNip"
-              placeholder="Wprowadź NIP (opcjonalne)"
-              pattern="[0-9]{10}"
-            />
-            <small class="error"
-                   *ngIf="buyerForm.controls['buyerNip']?.invalid && buyerForm.controls['buyerNip']?.touched">
-              Podano niepoprawny NIP (10 cyfr).
-            </small>
+        <div class="summary-line" *ngIf="shipping > 0">
+          <span>Dostawa:</span>
+          <span>{{ formatCurrency(shipping) }}</span>
+        </div>
+
+        <div class="summary-line free-shipping" *ngIf="shipping === 0">
+          <span>Dostawa:</span>
+          <span class="free">GRATIS</span>
+        </div>
+
+        <div class="summary-line" *ngIf="discount > 0">
+          <span>Rabat:</span>
+          <span class="discount">-{{ formatCurrency(discount) }}</span>
+        </div>
+
+        <div class="summary-line total">
+          <span>Razem do zapłaty:</span>
+          <span>{{ formatCurrency(total) }}</span>
+        </div>
+      </div>
+
+      <div class="order-notes" *ngIf="note">
+        <h3 class="section-title">Uwagi do zamówienia</h3>
+        <div class="note-content">{{ note }}</div>
+      </div>
+
+    </div>
+
+    <div class="buyer-form">
+      <h3 class="section-title">Dane do wysyłki</h3>
+
+      <form (ngSubmit)="saveBuyerInfo()" #buyerForm="ngForm">
+
+        <div class="form-group">
+          <label for="buyerName">Imię i nazwisko *</label>
+          <input
+            id="buyerName"
+            type="text"
+            [(ngModel)]="buyerName"
+            name="buyerName"
+            required
+            class="form-input"
+            placeholder="Jan Kowalski">
+          <div class="form-error" *ngIf="buyerForm.submitted && !buyerName">
+            To pole jest wymagane
           </div>
         </div>
-        <div class="button-group">
-          <button
-            type="button"
-            class="back-button"
-            (click)="goBackToCart()"
-          >
-            Powrót do Koszyka
+
+        <div class="form-group">
+          <label for="buyerEmail">Adres email *</label>
+          <input
+            id="buyerEmail"
+            type="email"
+            [(ngModel)]="buyerAddressEmail"
+            name="buyerAddressEmail"
+            required
+            (blur)="checkEmailValidation(buyerAddressEmail)"
+            class="form-input"
+            [class.error]="emailError"
+            placeholder="jan@example.com">
+          <div class="form-error" *ngIf="emailError">
+            Podaj prawidłowy adres email
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="buyerPhone">Numer telefonu *</label>
+          <input
+            id="buyerPhone"
+            type="tel"
+            [(ngModel)]="buyerPhone"
+            name="buyerPhone"
+            required
+            pattern="[0-9]{9}"
+            class="form-input"
+            placeholder="123456789">
+          <div class="form-error" *ngIf="buyerForm.submitted && !buyerPhone">
+            Podaj numer telefonu (9 cyfr)
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="buyerAddress">Adres dostawy *</label>
+          <textarea
+            id="buyerAddress"
+            [(ngModel)]="buyerAddress"
+            name="buyerAddress"
+            required
+            class="form-input"
+            rows="3"
+            placeholder="ul. Przykładowa 123&#10;00-001 Warszawa"></textarea>
+          <div class="form-error" *ngIf="buyerForm.submitted && !buyerAddress">
+            To pole jest wymagane
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="buyerNip">NIP (opcjonalnie)</label>
+          <input
+            id="buyerNip"
+            type="text"
+            [(ngModel)]="buyerNip"
+            name="buyerNip"
+            pattern="[0-9]{10}"
+            class="form-input"
+            placeholder="1234567890">
+          <div class="form-help">Podaj jeśli potrzebujesz faktury VAT</div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" (click)="goBackToCart()" class="btn-back">
+            ← Wróć do koszyka
           </button>
+
           <button
-            type="button"
-            class="checkout-button"
-            (click)="saveBuyerInfo()"
-            [disabled]="!buyerForm.valid"
-          >
-            Zatwierdź Dane
+            type="submit"
+            class="btn-submit"
+            [disabled]="!buyerForm.form.valid">
+            <span class="submit-icon">🛍️</span>
+            Złóż zamówienie
           </button>
         </div>
       </form>
