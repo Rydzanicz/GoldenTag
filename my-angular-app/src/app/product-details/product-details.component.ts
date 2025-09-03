@@ -77,6 +77,24 @@ export class ProductDetailsComponent implements OnInit {
       return;
     }
 
+    const productPreview = document.querySelector('app-product-preview');
+    let frontText = '';
+    let backText = '';
+    let tagShape = 'bone';
+
+    if (productPreview) {
+      const frontInput = productPreview.querySelector('input[placeholder="Imię pupila"]') as HTMLInputElement;
+      const backInput = productPreview.querySelector('textarea') as HTMLTextAreaElement;
+      const shapeButtons = productPreview.querySelectorAll('.shape-btn.active');
+
+      if (frontInput) frontText = frontInput.value;
+      if (backInput) backText = backInput.value;
+      if (shapeButtons.length > 0) {
+        const activeShape = shapeButtons[0].getAttribute('data-shape');
+        tagShape = activeShape || 'bone';
+      }
+    }
+
     const cartItem = {
       id: this.product.id,
       name: this.product.name,
@@ -84,7 +102,11 @@ export class ProductDetailsComponent implements OnInit {
       quantity: this.quantity,
       size: this.selectedSize,
       color: this.selectedColor,
-      image: this.product.image[0]
+      image: this.product.image[0],
+      category: this.product.category,
+      frontText: frontText || '',
+      backText: backText || '',
+      tagShape: tagShape
     };
 
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -92,7 +114,9 @@ export class ProductDetailsComponent implements OnInit {
     const existingItemIndex = cart.findIndex((item: any) =>
       item.id === this.product.id &&
       item.size === this.selectedSize &&
-      item.color === this.selectedColor
+      item.color === this.selectedColor &&
+      item.frontText === frontText &&
+      item.backText === backText
     );
 
     if (existingItemIndex > -1) {

@@ -1,150 +1,175 @@
 <div class="cart-container">
-  <div class="cart-content">
-    <div class="cart-header">
-      <h2 class="cart-title">
-        <span class="material-icons">shopping_cart</span>
-        Koszyk
-      </h2>
-      <p class="cart-subtitle" *ngIf="cartItems.length > 0">
-        {{ cartItems.length }} {{ cartItems.length === 1 ? 'produkt' : 'produktów' }} w koszyku
-      </p>
-    </div>
 
-    <div class="cart-body">
-      <div class="cart-layout" *ngIf="cartItems.length > 0">
-        <div class="cart-items-section">
-          <div class="cart-actions-top">
-            <button
-              class="clear-cart-btn"
-              (click)="clearCart()"
-              [attr.aria-label]="'Wyczyść koszyk zawierający ' + cartItems.length + ' produktów'">
-              <span class="material-icons">delete_sweep</span>
-              Wyczyść koszyk
-            </button>
+  <div class="cart-header">
+    <div class="breadcrumb">
+      <a routerLink="/shop">Sklep</a> / <span>Koszyk</span>
+    </div>
+    <h1 class="cart-title">
+      <span class="cart-icon">🛒</span>
+      Twój koszyk
+    </h1>
+    <p class="cart-count" *ngIf="cartItems.length > 0">
+      {{ cartItems.length }} {{ cartItems.length === 1 ? 'produkt' : 'produktów' }} w koszyku
+    </p>
+  </div>
+
+  <div class="cart-content" *ngIf="cartItems.length > 0">
+    <div class="cart-items">
+      <div *ngFor="let item of cartItems; trackBy: trackByCartItem" class="cart-item">
+        <div class="item-image">
+          <img
+            [src]="item.image"
+            [alt]="item.name"
+            (error)="onImageError($event)"
+            class="product-img">
+        </div>
+        <div class="item-details">
+          <h3 class="item-name">{{ item.name }}</h3>
+          <div class="item-category" *ngIf="item.category">
+            {{ item.category }}
+          </div>
+          <div class="item-options">
+            <div class="option-tag" *ngIf="item.size">
+              <span class="option-label">Rozmiar:</span>
+              <span class="option-value">{{ item.size }}</span>
+            </div>
+
+            <div class="option-tag" *ngIf="item.color">
+              <span class="option-label">Kolor:</span>
+              <span class="option-value">{{ item.color }}</span>
+            </div>
+
+            <div class="option-tag" *ngIf="item.tagShape">
+              <span class="option-label">Kształt:</span>
+              <span class="option-value">{{ item.tagShape === 'bone' ? 'Kość' : 'Okrągła' }}</span>
+            </div>
           </div>
 
-          <div class="cart-item" *ngFor="let item of cartItems; trackBy: trackByCartItem">
-            <div class="cart-item-image-container">
-              <img
-                [src]="item.image || 'assets/placeholder-product.jpg'"
-                [alt]="item.name"
-                class="cart-item-image"
-                (error)="onImageError($event)">
-            </div>
-
-            <div class="cart-item-details">
-              <h4 class="cart-item-name">{{ item.name }}</h4>
-              <div class="cart-item-category" *ngIf="item.category">
-                {{ item.category }}
+          <div class="personalization-info" *ngIf="item.frontText || item.backText">
+            <h4 class="personalization-title">
+              <span class="personalization-icon">✨</span>
+              Personalizacja
+            </h4>
+            <div class="personalization-details">
+              <div class="personalization-item" *ngIf="item.frontText">
+                <span class="pers-label">Przód:</span>
+                <span class="pers-value">"{{ item.frontText }}"</span>
               </div>
-              <div class="cart-item-price">
-                <span class="price-single">{{ item.price }} PLN</span>
-                <span class="price-multiply" *ngIf="item.quantity > 1"> × {{ item.quantity }}</span>
+              <div class="personalization-item" *ngIf="item.backText">
+                <span class="pers-label">Tył:</span>
+                <span class="pers-value">"{{ item.backText }}"</span>
               </div>
-            </div>
-
-            <div class="cart-item-controls">
-              <div class="quantity-controls">
-                <button
-                  class="quantity-btn quantity-decrease"
-                  (click)="decreaseQuantity(item)"
-                  [disabled]="item.quantity <= 1"
-                  [attr.aria-label]="'Zmniejsz ilość ' + item.name">
-                  <span class="material-icons">remove</span>
-                </button>
-
-                <span class="quantity-display" [attr.aria-label]="'Ilość: ' + item.quantity">
-                  {{ item.quantity }}
-                </span>
-
-                <button
-                  class="quantity-btn quantity-increase"
-                  (click)="increaseQuantity(item)"
-                  [attr.aria-label]="'Zwiększ ilość ' + item.name">
-                  <span class="material-icons">add</span>
-                </button>
-              </div>
-
-              <button
-                class="remove-btn"
-                (click)="removeItem(item)"
-                [attr.aria-label]="'Usuń ' + item.name + ' z koszyka'">
-                <span class="material-icons">delete</span>
-                Usuń
-              </button>
-            </div>
-
-            <div class="cart-item-total">
-              <span class="item-total-price">{{ getItemTotal(item) }} PLN</span>
             </div>
           </div>
         </div>
 
-        <div class="cart-summary">
-          <h3 class="cart-summary-title">Podsumowanie zamówienia</h3>
-
-          <div class="summary-row">
-            <span>Wartość produktów:</span>
-            <span>{{ getSubtotal() }} PLN</span>
+        <div class="item-controls">
+          <div class="item-price">
+            {{ item.price }} PLN
+            <div class="price-per-unit" *ngIf="item.quantity > 1">
+              {{ item.quantity }} × {{ item.price }} PLN
+            </div>
           </div>
 
-          <div class="summary-row" *ngIf="shipping > 0">
-            <span>Dostawa:</span>
-            <span>{{ shipping }} PLN</span>
+          <div class="quantity-section">
+            <div class="quantity-controls">
+              <button
+                (click)="decreaseQuantity(item)"
+                [disabled]="item.quantity <= 1"
+                class="qty-btn">
+                −
+              </button>
+              <span class="quantity-display">{{ item.quantity }}</span>
+              <button
+                (click)="increaseQuantity(item)"
+                class="qty-btn">
+                +
+              </button>
+            </div>
           </div>
 
-          <div class="summary-row" *ngIf="shipping === 0">
-            <span>Dostawa:</span>
-            <span class="free-shipping">GRATIS</span>
-          </div>
-
-          <div class="summary-row" *ngIf="discount > 0">
-            <span>Rabat:</span>
-            <span class="discount-amount">-{{ discount }} PLN</span>
-          </div>
-
-          <div class="cart-total">
-            <span>Razem do zapłaty:</span>
-            <span class="total-amount">{{ getTotalPrice() }} PLN</span>
-          </div>
-
-          <div class="note-container">
-            <label class="note-label" for="orderNote">Uwagi do zamówienia:</label>
-            <textarea
-              id="orderNote"
-              class="note-input form-textarea"
-              [(ngModel)]="orderNote"
-              placeholder="Dodaj uwagi do zamówienia (opcjonalnie)"
-              rows="3">
-            </textarea>
+          <div class="item-total">
+            {{ getItemTotal(item) }} PLN
           </div>
 
           <button
-            class="checkout-btn"
-            (click)="proceedToCheckout()"
-            [disabled]="isProcessing"
-            [attr.aria-label]="'Przejdź do płatności za zamówienie o wartości ' + getTotalPrice() + ' PLN'">
-            <span class="material-icons" *ngIf="!isProcessing">payment</span>
-            <span class="loading-spinner" *ngIf="isProcessing"></span>
-            {{ isProcessing ? 'Przetwarzanie...' : 'Przejdź do płatności' }}
-          </button>
-        </div>
-      </div>
-
-      <!-- Pusty koszyk -->
-      <div class="empty-cart" *ngIf="cartItems.length === 0">
-        <div class="empty-cart-icon">
-          <span class="material-icons">shopping_cart</span>
-        </div>
-        <h3 class="empty-cart-title">Twój koszyk jest pusty</h3>
-        <p class="empty-cart-text">Dodaj produkty do koszyka, aby kontynuować zakupy</p>
-        <div class="empty-cart-actions">
-          <button class="btn btn-primary" routerLink="/shop">
-            <span class="material-icons">shopping_bag</span>
-            Rozpocznij zakupy
+            (click)="removeItem(item)"
+            class="remove-btn"
+            title="Usuń produkt">
+            🗑️
           </button>
         </div>
       </div>
     </div>
+
+    <div class="cart-summary">
+      <h3 class="summary-title">Podsumowanie zamówienia</h3>
+
+      <div class="summary-line">
+        <span>Wartość produktów:</span>
+        <span class="summary-value">{{ getSubtotal() }} PLN</span>
+      </div>
+
+      <div class="summary-line" *ngIf="shipping > 0">
+        <span>Dostawa:</span>
+        <span class="summary-value">{{ shipping }} PLN</span>
+      </div>
+
+      <div class="summary-line free-shipping" *ngIf="shipping === 0">
+        <span>Dostawa:</span>
+        <span class="summary-value free">GRATIS</span>
+      </div>
+
+      <div class="summary-line" *ngIf="discount > 0">
+        <span>Rabat:</span>
+        <span class="summary-value discount">-{{ discount }} PLN</span>
+      </div>
+
+      <div class="summary-line total">
+        <span>Razem do zapłaty:</span>
+        <span class="summary-value">{{ getTotalPrice() }} PLN</span>
+      </div>
+
+      <div class="order-notes">
+        <label for="orderNote" class="note-label">Uwagi do zamówienia:</label>
+        <textarea
+          id="orderNote"
+          [(ngModel)]="orderNote"
+          class="note-input"
+          placeholder="Dodatkowe informacje o zamówieniu..."
+          rows="3">
+        </textarea>
+      </div>
+
+      <div class="action-buttons">
+        <button
+          (click)="clearCart()"
+          class="clear-btn"
+          *ngIf="cartItems.length > 0">
+          Wyczyść koszyk
+        </button>
+
+        <button
+          (click)="proceedToCheckout()"
+          [disabled]="isProcessing"
+          class="checkout-btn">
+          <span *ngIf="!isProcessing">
+            Przejdź do płatności
+            <span class="checkout-icon">🛍️</span>
+          </span>
+          <span *ngIf="isProcessing">Przetwarzanie...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-cart" *ngIf="cartItems.length === 0">
+    <div class="empty-cart-icon">🛒</div>
+    <h3>Twój koszyk jest pusty</h3>
+    <p>Dodaj produkty do koszyka, aby kontynuować zakupy</p>
+    <button routerLink="/shop" class="shop-btn">
+      <span class="shop-icon">🏪</span>
+      Przejdź do sklepu
+    </button>
   </div>
 </div>

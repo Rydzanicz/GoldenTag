@@ -20,4 +20,9 @@ export interface CartItem {
   image: string;
   category?: string;
   quantity: number;
+  size?: string;
+  color?: string;
+  frontText?: string;
+  backText?: string;
+  tagShape?: string;
 }
