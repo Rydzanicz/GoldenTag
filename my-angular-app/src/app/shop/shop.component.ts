@@ -26,8 +26,8 @@ export class ShopComponent implements OnInit {
         ' i artystycznym wyczuciem. Każdy egzemplarz powstaje w procesie rzemieślniczym, co sprawia, że jest unikalny i' +
         ' jedyny w swoim rodzaju.',
       price: 120,
-      originalPrice: 180,
-      image: ['assets/zegar1.jpg'],
+      originalPrice: 280,
+      image: ['assets/grant.jpg'],
       badge: 'Bestseller',
       rating: 5,
       ratingCount: 45,
@@ -40,7 +40,7 @@ export class ShopComponent implements OnInit {
       descriptionDetails: 'Adresówka wykonana z najwyższej jakości rodolitem, tworzona ręcznie z dbałością o każdy szczegół.' +
         ' Każda powstaje w procesie indywidualnego wykonania, co sprawia, że jest unikalna i pełna artystycznego wyrazu.',
       price: 130,
-      image: ['assets/zegar2.jpg'],
+      image: ['assets/kosc.jpg'],
       badge: 'Bestseller',
       rating: 4,
       ratingCount: 18,
@@ -52,7 +52,7 @@ export class ShopComponent implements OnInit {
       description: 'Romantyczna obroża z rubinami w kształcie serca.',
       descriptionDetails: 'Romantyczna adresówka z rubinami w kształcie serca. Każdy kamień został ręcznie dopasowany przez naszych mistrzów jubilerów.',
       price: 99,
-      image: ['assets/zegar3.jpg'],
+      image: ['assets/Rubinowesserce.jpg'],
       badge: 'Nowy',
       rating: 4.5,
       ratingCount: 9,

@@ -22,7 +22,8 @@ export class ProductPreviewComponent implements OnInit {
 
   availableShapes = [
     {id: 'bone', name: 'Kość', image: 'assets/kosci.webp'},
-    {id: 'circle', name: 'Okrągła', image: 'assets/okrogle.webp'}
+    {id: 'circle', name: 'Okrągła', image: 'assets/okrogle.webp'},
+    {id: 'hearts', name: 'Serce', image: 'assets/serce.webp'}
   ];
 
   ngOnInit() {
