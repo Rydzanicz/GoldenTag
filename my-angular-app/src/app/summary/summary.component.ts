@@ -99,7 +99,7 @@ export class SummaryComponent implements OnInit {
       this.cartItems = cart ? JSON.parse(cart) : [];
       this.cartItemCount = this.cartItems.reduce((total, item) => total + item.quantity, 0);
       this.subtotal = this.getTotalPrice();
-      this.shipping = this.subtotal >= 200 ? 0 : 15;
+      this.shipping = this.subtotal >= 150 ? 0 : 15;
       this.total = this.subtotal + this.shipping - this.discount;
     }
   }

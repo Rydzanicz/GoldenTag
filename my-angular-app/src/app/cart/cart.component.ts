@@ -151,7 +151,7 @@ export class CartComponent implements OnInit {
 
   private calculateShipping() {
     const subtotal = this.getSubtotal();
-    this.shipping = subtotal >= 200 ? 0 : 15;
+    this.shipping = subtotal >= 150 ? 0 : 15;
   }
 
   private showToast(message: string, type: 'success' | 'error' | 'info') {
