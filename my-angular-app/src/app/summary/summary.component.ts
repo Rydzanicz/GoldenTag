@@ -38,6 +38,7 @@ export class SummaryComponent implements OnInit {
   emailError: boolean = false;
 
   acceptTerms: boolean = false;
+  testModeAccepted: boolean = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -58,6 +59,7 @@ export class SummaryComponent implements OnInit {
       this.buyerPhone &&
       this.buyerPhone.trim() &&
       this.acceptTerms &&
+      this.testModeAccepted &&
       !this.emailError);
   }
 
@@ -127,6 +129,11 @@ export class SummaryComponent implements OnInit {
 
     if (!this.acceptTerms) {
       alert('Aby złożyć zamówienie, musisz zaakceptować regulamin i politykę prywatności.');
+      return;
+    }
+
+    if (!this.testModeAccepted) {
+      alert('Aby złożyć zamówienie, musisz zaakceptować etap testów.');
       return;
     }
 

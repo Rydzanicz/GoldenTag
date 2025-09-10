@@ -530,3 +530,31 @@
     gap: 2px;
   }
 }
+
+.test-mode-banner {
+  background: linear-gradient(90deg, #fffbe6 0%, #ffe4b8 100%);
+  color: #b26a00;
+  border: 1px solid #ffbe76;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  padding: 12px 18px;
+  margin: 16px 0 24px 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(220, 160, 50, 0.08);
+}
+
+.banner-icon {
+  font-size: 1.4rem;
+}
+
+@media (max-width: 600px) {
+  .test-mode-banner {
+    font-size: 1rem;
+    padding: 10px 8px;
+  }
+}

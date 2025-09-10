@@ -12,6 +12,10 @@
       {{ cartItems.length }} {{ cartItems.length === 1 ? 'produkt' : 'produktów' }} w koszyku
     </p>
   </div>
+  <div class="info-banner test-mode-banner">
+    <span class="banner-icon">⚠️</span>
+    To jest wersja testowa sklepu – sprzedaż produktów nie jest jeszcze aktywna.
+  </div>
 
   <div class="cart-content" *ngIf="cartItems.length > 0">
     <div class="cart-items">
