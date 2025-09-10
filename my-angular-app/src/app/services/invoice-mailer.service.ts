@@ -1,13 +1,15 @@
 import {Injectable, Injector} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InvoiceMailerService {
-  private apiUrl = 'http://localhost:8080';
-  private apiKey = 'VIGGO=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWSUdHTyIsImlhdCI6MTczMzM5MTE2OCwiZXhwIjoxNzMzNDI3MTY4fQ.8QE--sghB1EU8u_bbmsETQ_RuY2W7P5HEbBo7twkyH8';
+  private apiUrl = environment.apiUrl;
+  private apiKey = environment.apiKey;
+
   private http: HttpClient | undefined;
 
   constructor(private injector: Injector) {
